@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bufio"  // 添加 bufio 包导入
+	"bufio"  // 确保导入了 bufio 包
 	"errors"
 	"flag"
 	"fmt"
