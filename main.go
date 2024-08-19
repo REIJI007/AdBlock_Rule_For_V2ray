@@ -14,17 +14,20 @@ import (
 	"github.com/golang/protobuf/proto"
 )
 
+// Entry 结构体定义了一个条目的类型、值和属性
 type Entry struct {
 	Type  string
 	Value string
 	Attrs []*router.Domain_Attribute
 }
 
+// List 结构体定义了一个列表,包含名称和多个条目
 type List struct {
 	Name  string
 	Entry []Entry
 }
 
+// parseDomain 函数解析域名字符串,填充 Entry 结构体
 func parseDomain(domain string, entry *Entry) error {
 	kv := strings.Split(domain, ":")
 	if len(kv) == 1 {
@@ -42,6 +45,7 @@ func parseDomain(domain string, entry *Entry) error {
 	return errors.New("Invalid format: " + domain)
 }
 
+// parseAttribute 函数解析属性字符串,返回 Domain_Attribute 结构
 func parseAttribute(attr string) (router.Domain_Attribute, error) {
 	var attribute router.Domain_Attribute
 	if len(attr) == 0 || attr[0] != '@' {
@@ -64,6 +68,7 @@ func parseAttribute(attr string) (router.Domain_Attribute, error) {
 	return attribute, nil
 }
 
+// parseEntry 函数解析一行文本,返回 Entry 结构
 func parseEntry(line string) (Entry, error) {
 	line = strings.TrimSpace(line)
 	parts := strings.Split(line, " ")
@@ -88,6 +93,7 @@ func parseEntry(line string) (Entry, error) {
 	return entry, nil
 }
 
+// removeComment 函数移除行中的注释部分
 func removeComment(line string) string {
 	idx := strings.Index(line, "#")
 	if idx == -1 {
@@ -96,6 +102,7 @@ func removeComment(line string) string {
 	return strings.TrimSpace(line[:idx])
 }
 
+// Load 函数从文件中加载数据,返回 List 结构
 func Load(path string) (*List, error) {
 	file, err := os.Open(path)
 	if err != nil {
@@ -123,6 +130,7 @@ func Load(path string) (*List, error) {
 	return list, nil
 }
 
+// toProto 方法将 List 转换为 GeoSite 协议缓冲结构
 func (l *List) toProto() (*router.GeoSite, error) {
 	site := &router.GeoSite{
 		CountryCode: l.Name,
@@ -163,31 +171,37 @@ func (l *List) toProto() (*router.GeoSite, error) {
 func main() {
 	flag.Parse()
 
+	// 定义输入和输出文件名
 	inputFile := "adblock_reject_domain_geosite.txt"
 	outputFile := "adblock_geosite.dat"
 
+	// 从输入文件加载数据
 	list, err := Load(inputFile)
 	if err != nil {
 		fmt.Println("Failed to load input file:", err)
 		return
 	}
 
+	// 将加载的数据转换为协议缓冲结构
 	site, err := list.toProto()
 	if err != nil {
 		fmt.Println("Failed to convert to proto:", err)
 		return
 	}
 
+	// 创建 GeoSiteList 结构并填充数据
 	protoList := &router.GeoSiteList{
 		Entry: []*router.GeoSite{site},
 	}
 
+	// 将协议缓冲结构序列化为字节流
 	protoBytes, err := proto.Marshal(protoList)
 	if err != nil {
 		fmt.Println("Failed to marshal proto:", err)
 		return
 	}
 
+	// 将序列化后的数据写入输出文件
 	if err := os.WriteFile(outputFile, protoBytes, 0777); err != nil {
 		fmt.Println("Failed to write output file:", err)
 	} else {
