@@ -21,18 +21,14 @@ jobs:
       with:
         go-version: '1.20' # 指定Go版本
 
-    - name: Cache Go modules
-      uses: actions/cache@v3
-      with:
-        path: | 
-          **/go/pkg/mod
-          **/go.sum
-        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-        restore-keys: |
-          ${{ runner.os }}-go-
+    - name: Create go.mod
+      run: |
+        go mod init example.com/myapp || echo "go.mod already exists"
 
-    - name: Install dependencies
-      run: go mod tidy
+    - name: Add dependencies
+      run: |
+        go mod tidy
+        go mod download
 
     - name: Run Go program
       run: go run main.go
@@ -45,8 +41,7 @@ jobs:
     - name: Commit and push changes
       run: |
         git add adblock_geosite.dat
-        git commit -m "Update adblock_geosite.dat"
+        git commit -m "Update adblock_geosite.dat" || echo "No changes to commit"
         git push
-      # 这里需要你设置一个 GitHub Token 以便有权限推送更改
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
