@@ -18,22 +18,35 @@ jobs:
         with:
           go-version: '1.20'  # 根据你的 Go 版本调整
 
+      - name: Set up Go Module
+        run: |
+          mkdir -p mymodule
+          mv main.go mymodule/
+          cd mymodule
+          go mod init example.com/mymodule
+          go get github.com/golang/protobuf/proto
+          go get v2ray.com/core/app/router
+
       - name: Run main.go
         run: |
+          cd mymodule
           go run main.go
+          mv adblock_geosite.dat ../adblock_geosite.dat  # 移动生成的文件到仓库根目录
 
       - name: Configure Git
         run: |
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
 
-      - name: Force Add and Commit file  # 强制添加并提交 adblock_geosite.dat 文件
+      - name: Force Add and Commit file  # 强制添加并提交adblock_geosite.dat文件
         run: |
-          git add -f adblock_geosite.dat  # 强制添加 adblock_geosite.dat 文件到根目录
+          git add -f ../adblock_geosite.dat  # 强制添加 adblock_geosite.dat 文件
           git commit -m 'Update adblock_geosite.dat' || echo "No changes to commit"
 
-      - name: Push changes to repository  # 推送更改到远程仓库
+      - name: Retry Push file  # 推送adblock_geosite.dat文件，失败时重试
         env:
           TOKEN: ${{ secrets.TOKEN }}  # 使用 GitHub 密钥进行身份验证
         run: |
-          git push --force "https://${TOKEN}@github.com/${{ github.repository }}.git" HEAD:${{ github.ref }}
+          for i in {1..5}; do  # 尝试最多5次
+            git push --force-with-lease "https://${TOKEN}@github.com/${{ github.repository }}.git" HEAD:${{ github.ref }}" && break || (echo "Push failed, retrying in 10 seconds..." && sleep 10)
+          done
