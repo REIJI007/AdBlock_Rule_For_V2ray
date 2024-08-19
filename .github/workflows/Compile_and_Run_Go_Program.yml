@@ -34,15 +34,13 @@ jobs:
       run: |
         git config --global user.email "you@example.com"
         git config --global user.name "Your Name"
-        
-        # 检查文件是否存在
-        if [ -f adblock_geosite.dat ]; then
-          git add adblock_geosite.dat
-          git add generate_geosite go.mod go.sum  # 确保将所有生成的文件添加到提交中
-          git commit -m "Update adblock_geosite.dat and add Go files" || echo "No changes to commit."
-          
-          # 强制推送到 main 分支
-          git push --force https://x-access-token:${{ secrets.TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
-        else
-          echo "File adblock_geosite.dat does not exist. Skipping commit."
-        fi
+
+        # 确保将所有生成的文件添加到提交中
+        git add adblock_geosite.dat
+        git add generate_geosite go.mod go.sum || true  # 使用 '|| true' 忽略错误
+
+        # 如果有更改则提交，否则跳过
+        git diff --cached --quiet || git commit -m "Update adblock_geosite.dat and add Go files"
+
+        # 强制推送到 main 分支
+        git push --force https://x-access-token:${{ secrets.TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
