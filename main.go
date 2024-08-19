@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"  // 添加 bufio 包导入
 	"errors"
 	"flag"
 	"fmt"
