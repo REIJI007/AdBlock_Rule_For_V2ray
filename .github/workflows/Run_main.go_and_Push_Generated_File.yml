@@ -26,6 +26,7 @@ jobs:
           go mod init example.com/mymodule
           go get github.com/golang/protobuf/proto
           go get v2ray.com/core/app/router
+          go mod tidy  # 确保所有依赖被正确下载
 
       - name: Run main.go
         run: |
