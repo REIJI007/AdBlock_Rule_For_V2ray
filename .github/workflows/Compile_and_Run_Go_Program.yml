@@ -38,8 +38,5 @@ jobs:
         # 确保将所有生成的文件添加到提交中
         git add adblock_geosite.dat
 
-        # 如果有更改则提交，否则跳过
-        git diff --cached --quiet || git commit -m "Update adblock_geosite.dat and add Go files"
-
         # 强制推送到 main 分支
         git push --force https://x-access-token:${{ secrets.TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
