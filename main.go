@@ -173,6 +173,7 @@ func main() {
 
 	// 定义输入文件名
 	inputFile := "adblock_reject_domain_geosite.txt"
+	outputFile := "adblock_geosite.dat" // 确保输出文件在当前目录中
 
 	// 从输入文件加载数据
 	list, err := Load(inputFile)
@@ -200,8 +201,7 @@ func main() {
 		return
 	}
 
-	// 将字节流写入 adblock_geosite.dat 文件
-	outputFile := "adblock_geosite.dat"
+	// 将字节流写入文件
 	err = os.WriteFile(outputFile, protoBytes, 0644)
 	if err != nil {
 		fmt.Println("Failed to write output file:", err)
@@ -209,5 +209,5 @@ func main() {
 	}
 
 	// 输出生成成功的消息
-	fmt.Println("adblock_geosite.dat generated successfully. Length:", len(protoBytes))
+	fmt.Println("Proto bytes generated successfully. Length:", len(protoBytes))
 }
