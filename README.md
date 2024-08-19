@@ -80,68 +80,52 @@
 
 **四、关于本仓库使用方式：**
 
-  *使用方式一：下载releases中的文件，修改clash的yaml配置中的rules字段引用本地规则集作为域名拦截规则（需要手动下载更新）*
+  *使用方式一：下载releases中的adblock_reject_domain.txt文件，修改V2ray的json配置中的"routing"字段下的"domain"部分*
 
 
-  *使用方式二：将下面对应格式的配置文件中rule-providers字段和rules字段内容添加到你的配置文件充当远程规则集，需要特别注意配置文件的缩进和对齐（同步本仓库的云端部署的远程规则集配置)*
+  *使用方式二：将下面对应格式的配置文件中"outbounds"字段和"routing"字段内容添加到你的json配置文件中，注意"outbounds"与"routing"之间的配合*
 <hr>
 
 
 
 
 ```conf
-#YAML格式外部远程拦截域名规则集
-rule-providers:
-  adblock:
-    type: http
-    behavior: domain
-    format: yaml
-    url: https://raw.githubusercontent.com/REIJI007/AdBlock_Rule_For_Clash/main/adblock_reject.yaml
-    path: ./ruleset/adblock_reject.yaml
-    interval: 120
-    
-rules:
-  - RULE-SET,adblock,REJECT
+{
+
+ "outbounds": 
+  {
+   [
+     {
+       "protocol": "blackhole",
+       "tag": "adblock"         //此outboundTag出站配合下面的域名拦截路由
+     }
+   ],
+  }
+  
+  
+ "routing": 
+  {
+    "domainStrategy": "AsIs",
+    "rules": 
+    [
+      {
+        "type": "field",
+        "domain": 
+        [
+          "ext:adblock.dat:adblock"    // 引用 adblock.dat 文件中的 adblock 标签
+        ],
+        "outboundTag": "adblock"      // 匹配到的域名流量会被路由到名为adblock的outboundTag出站
+      }
+    ]
+  }
+  
+}
 ```
-
-```conf
-#MRS格式外部远程拦截域名规则集
-rule-providers:
-  adblock:
-    type: http
-    behavior: domain
-    format: mrs
-    url: https://raw.githubusercontent.com/REIJI007/AdBlock_Rule_For_Clash/main/adblock_reject.mrs
-    path: ./ruleset/adblock_reject.mrs
-    interval: 120
-    
-rules:
-  - RULE-SET,adblock,REJECT
-```
-
-```conf
-#TEXT格式外部远程拦截域名规则集
-rule-providers:
-  adblock:
-    type: http
-    behavior: domain
-    format: txt
-    url: https://raw.githubusercontent.com/REIJI007/AdBlock_Rule_For_Clash/main/adblock_reject.txt
-    path: ./ruleset/adblock_reject.txt
-    interval: 120
-    
-rules:
-  - RULE-SET,adblock,REJECT
-```
-
-
-
-
 <hr>
 
 **五、关于本仓库的使用效果为什么没有普通广告过滤器效果好的疑问解答：**
 <br>
-*因为普通的广告过滤器包含域名过滤（拦截广告域名）、路径过滤（例如拦截URL路径中包含/ads/的所有请求）、正则表达式过滤（例如拦截所有包含ads.js或ad.js的URL）、类型过滤（例如只拦截图片资源）、隐藏元素等等多因素作用下使得在广告拦截测试网站中可以取得高分。**但碍于clash的路由行为（可分别参考相关文档）**，本仓库仅提取了被拦截域名进行域名完全匹配过滤，换言之，本仓库就是一个“删减版”的广告过滤器（仅保留了域名完全匹配过滤功能，规则数在25万条左右），所以最终效果没有广告过滤器效果好*
+*因为普通的广告过滤器包含域名过滤（拦截广告域名）、路径过滤（例如拦截URL路径中包含/ads/的所有请求）、正则表达式过滤（例如拦截所有包含ads.js或ad.js的URL）、类型过滤（例如只拦截图片资源）、隐藏元素等等多因素作用下使得在广告拦截测试网站中可以取得高分。**但碍于V2ray的路由行为（可参考相关文档）**，本仓库仅提取了被拦截域名进行域名完全匹配过滤，换言之，本仓库就是一个“删减版”的广告过滤器（仅保留了域名完全匹配过滤功能，规则数在25万条左右），所以最终效果没有广告过滤器效果好*
 
 
 
