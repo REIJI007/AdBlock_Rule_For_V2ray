@@ -31,6 +31,17 @@ jobs:
         run: |
           cd mymodule
           go run main.go
+          if [ ! -f adblock_geosite.dat ]; then
+            echo "Error: adblock_geosite.dat was not generated."
+            exit 1
+          fi
+          mv adblock_geosite.dat ../  # 移动文件到仓库根目录
+
+      - name: Print working directory and list files  # 列出文件以确保路径正确
+        run: |
+          cd ..
+          pwd
+          ls -al
 
       - name: Configure Git
         run: |
@@ -39,7 +50,7 @@ jobs:
 
       - name: Force Add and Commit file  # 强制添加并提交 adblock_geosite.dat 文件
         run: |
-          git add -f adblock_geosite.dat  # 强制添加 adblock_geosite.dat 文件
+          git add -f adblock_geosite.dat  # 添加文件到仓库根目录
           git commit -m 'Update adblock_geosite.dat' || git commit --allow-empty -m 'Empty commit to force push'  # 提交更改，若无更改则提交空更改
 
       - name: Retry Push file  # 推送 adblock_geosite.dat 文件，失败时重试
