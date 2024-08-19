@@ -200,6 +200,14 @@ func main() {
 		return
 	}
 
+	// 将字节流写入 adblock_geosite.dat 文件
+	outputFile := "adblock_geosite.dat"
+	err = os.WriteFile(outputFile, protoBytes, 0644)
+	if err != nil {
+		fmt.Println("Failed to write output file:", err)
+		return
+	}
+
 	// 输出生成成功的消息
-	fmt.Println("Proto bytes generated successfully. Length:", len(protoBytes))
+	fmt.Println("adblock_geosite.dat generated successfully. Length:", len(protoBytes))
 }
