@@ -25,12 +25,6 @@ jobs:
         run: |
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
-
-      - name: Pull latest changes
-        run: |
-          git fetch origin
-          git merge origin/main
-
       - name: Commit and Push changes
         env:
           TOKEN: ${{ secrets.TOKEN }}
