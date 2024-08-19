@@ -22,10 +22,6 @@ jobs:
         run: |
           go run main.go
 
-      - name: Check for adblock_geosite.dat
-        run: |
-          ls -l adblock_geosite.dat || echo "adblock_geosite.dat not found"
-
       - name: Configure Git
         run: |
           git config user.name "GitHub Action"
@@ -36,10 +32,8 @@ jobs:
           git add -f adblock_geosite.dat  # 强制添加 adblock_geosite.dat 文件到根目录
           git commit -m 'Update adblock_geosite.dat' || echo "No changes to commit"
 
-      - name: Retry Push file  # 推送 adblock_geosite.dat 文件，失败时重试
+      - name: Push changes to repository  # 推送更改到远程仓库
         env:
           TOKEN: ${{ secrets.TOKEN }}  # 使用 GitHub 密钥进行身份验证
         run: |
-          for i in {1..5}; do  # 尝试最多 5 次
-            git push --force-with-lease "https://${TOKEN}@github.com/${{ github.repository }}.git" HEAD:${{ github.ref }} && break || (echo "Push failed, retrying in 10 seconds..." && sleep 10)
-          done
+          git push --force "https://${TOKEN}@github.com/${{ github.repository }}.git" HEAD:${{ github.ref }}
