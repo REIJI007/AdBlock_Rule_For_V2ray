@@ -32,7 +32,7 @@ jobs:
           cd mymodule
           go run main.go
 
-     - name: Move adblock_geosite.dat to root
+      - name: Move adblock_geosite.dat to root
         run: |
           mv mymodule/adblock_geosite.dat .  # 将文件移动到仓库根目录
 
