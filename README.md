@@ -91,31 +91,30 @@
 
 ```conf
 {
- "outbounds": 
-  {
-   [
-     {
-       "protocol": "blackhole",
-       "tag": "adblock"         //此outboundTag出站配合下面的域名拦截路由
-     }
-   ],
-  }
- "routing": 
-  {
-    "domainStrategy": "AsIs",
-    "rules": 
+    "outbounds": 
     [
-      {
-        "type": "field",
-        "domain": 
+        {
+            "protocol": "blackhole",
+            "tag": "adblock"  // 此 outboundTag 出站配合下面的域名拦截路由
+        }
+    ],
+    "routing": 
+    {
+        "domainStrategy": "AsIs",
+        "rules": 
         [
-          "ext:adblock.dat:adblock"    // 引用 adblock.dat 文件中的 adblock 标签
-        ],
-        "outboundTag": "adblock"      // 匹配到的域名流量会被路由到名为adblock的outboundTag出站
-      }
-    ]
-  }
+            {
+                "type": "field",
+                "domain": 
+                [
+                    "ext:adblock.dat:adblock"  // 引用 adblock.dat 文件中的 adblock 标签
+                ],
+                "outboundTag": "adblock"  // 匹配到的域名流量会被路由到名为 adblock 的 outboundTag 出站
+            }
+        ]
+    }
 }
+
 ```
 <hr>
 
