@@ -28,16 +28,18 @@ jobs:
     - name: Run the Go program
       run: ./generate_geosite  # 运行生成的可执行文件
 
-    - name: Commit and push adblock_geosite.dat
+    - name: Commit and push .dat file
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
       run: |
         git config --global user.email "you@example.com"
         git config --global user.name "Your Name"
-        
-        # 添加并提交 adblock_geosite.dat 文件
+
+        # 确保将所有生成的文件添加到提交中
         git add adblock_geosite.dat
-        git commit -m "Update adblock_geosite.dat" || echo "No changes to commit."
-        
+
+        # 如果有更改则提交，否则跳过
+        git diff --cached --quiet || git commit -m "Update adblock_geosite.dat and add Go files"
+
         # 强制推送到 main 分支
         git push --force https://x-access-token:${{ secrets.TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
