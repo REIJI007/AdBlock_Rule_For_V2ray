@@ -48,10 +48,12 @@ jobs:
     - name: Apply stashed changes
       run: git stash pop || echo "No changes to apply"
 
+    - name: Force add adblock.dat
+      run: git add -f adblock.dat
+
     - name: Commit and push changes
       run: |
-        git add adblock.dat
         git commit -m "Update adblock.dat" || echo "No changes to commit"
-        git push
+        git push --force
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
