@@ -5,9 +5,9 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"go/build"
 	"io/ioutil"
 	"os"
-	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -16,31 +16,27 @@ import (
 )
 
 var (
-	// 定义数据文件路径的命令行参数
-	filePath = flag.String("filepath", "adblock_reject_domain_geosite.txt", "Path to your 'adblock_reject_domain_geosite.txt' file")
+	dataPath        = flag.String("datapath", "", "Path to your custom 'data' directory")
+	defaultDataPath = "src/github.com/v2ray/domain-list-community/data"
 )
 
-// Entry 代表一个域名条目
 type Entry struct {
 	Type  string
 	Value string
 	Attrs []*router.Domain_Attribute
 }
 
-// List 代表域名列表
 type List struct {
 	Name  string
 	Entry []Entry
 }
 
-// ParsedList 代表解析后的域名列表
 type ParsedList struct {
 	Name      string
 	Inclusion map[string]bool
 	Entry     []Entry
 }
 
-// 将解析后的列表转换为 Protobuf 格式
 func (l *ParsedList) toProto() (*router.GeoSite, error) {
 	site := &router.GeoSite{
 		CountryCode: l.Name,
@@ -78,7 +74,6 @@ func (l *ParsedList) toProto() (*router.GeoSite, error) {
 	return site, nil
 }
 
-// 移除行中的注释部分
 func removeComment(line string) string {
 	idx := strings.Index(line, "#")
 	if idx == -1 {
@@ -87,7 +82,6 @@ func removeComment(line string) string {
 	return strings.TrimSpace(line[:idx])
 }
 
-// 解析域名
 func parseDomain(domain string, entry *Entry) error {
 	kv := strings.Split(domain, ":")
 	if len(kv) == 1 {
@@ -105,14 +99,13 @@ func parseDomain(domain string, entry *Entry) error {
 	return errors.New("Invalid format: " + domain)
 }
 
-// 解析域名属性
 func parseAttribute(attr string) (router.Domain_Attribute, error) {
 	var attribute router.Domain_Attribute
 	if len(attr) == 0 || attr[0] != '@' {
 		return attribute, errors.New("invalid attribute: " + attr)
 	}
 
-	attr = attr[0:]
+	attr = attr[1:]  // 修正：去掉 @ 符号
 	parts := strings.Split(attr, "=")
 	if len(parts) == 1 {
 		attribute.Key = strings.ToLower(parts[0])
@@ -128,7 +121,6 @@ func parseAttribute(attr string) (router.Domain_Attribute, error) {
 	return attribute, nil
 }
 
-// 解析条目
 func parseEntry(line string) (Entry, error) {
 	line = strings.TrimSpace(line)
 	parts := strings.Split(line, " ")
@@ -153,7 +145,19 @@ func parseEntry(line string) (Entry, error) {
 	return entry, nil
 }
 
-// 加载域名列表
+func DetectPath(path string) (string, error) {
+	arrPath := strings.Split(path, string(filepath.ListSeparator))
+	for _, content := range arrPath {
+		fullPath := filepath.Join(content, defaultDataPath)
+		_, err := os.Stat(fullPath)
+		if err == nil || os.IsExist(err) {
+			return fullPath, nil
+		}
+	}
+	err := fmt.Errorf("directory '%s' not found in '$GOPATH'", defaultDataPath)
+	return "", err
+}
+
 func Load(path string) (*List, error) {
 	file, err := os.Open(path)
 	if err != nil {
@@ -162,7 +166,7 @@ func Load(path string) (*List, error) {
 	defer file.Close()
 
 	list := &List{
-		Name: "ADBLOCK",
+		Name: strings.ToUpper(filepath.Base(path)),
 	}
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
@@ -181,43 +185,149 @@ func Load(path string) (*List, error) {
 	return list, nil
 }
 
+func ParseList(list *List, ref map[string]*List) (*ParsedList, error) {
+	pl := &ParsedList{
+		Name:      list.Name,
+		Inclusion: make(map[string]bool),
+	}
+	entryList := list.Entry
+	for {
+		newEntryList := make([]Entry, 0, len(entryList))
+		hasInclude := false
+		for _, entry := range entryList {
+			if entry.Type == "include" {
+				if pl.Inclusion[entry.Value] {
+					continue
+				}
+				refName := strings.ToUpper(entry.Value)
+				pl.Inclusion[refName] = true
+				r := ref[refName]
+				if r == nil {
+					return nil, errors.New(entry.Value + " not found.")
+				}
+				newEntryList = append(newEntryList, r.Entry...)
+				hasInclude = true
+			} else {
+				newEntryList = append(newEntryList, entry)
+			}
+		}
+		entryList = newEntryList
+		if !hasInclude {
+			break
+		}
+	}
+	pl.Entry = entryList
+
+	return pl, nil
+}
+
+func envFile() (string, error) {
+	if file := os.Getenv("GOENV"); file != "" {
+		if file == "off" {
+			return "", fmt.Errorf("GOENV=off")
+		}
+		return file, nil
+	}
+	dir, err := os.UserConfigDir()
+	if err != nil {
+		return "", err
+	}
+	if dir == "" {
+		return "", fmt.Errorf("missing user-config dir")
+	}
+	return filepath.Join(dir, "go", "env"), nil
+}
+
+func getRuntimeEnv(key string) (string, error) {
+	file, err := envFile()
+	if err != nil {
+		return "", err
+	}
+	if file == "" {
+		return "", fmt.Errorf("missing runtime env file")
+	}
+	var data []byte
+	var runtimeEnv string
+	data, err = ioutil.ReadFile(file)
+	envStrings := strings.Split(string(data), "\n")
+	for _, envItem := range envStrings {
+		envItem = strings.TrimSuffix(envItem, "\r")
+		envKeyValue := strings.Split(envItem, "=")
+		if strings.ToLower(envKeyValue[0]) == strings.ToLower(key) {
+			runtimeEnv = envKeyValue[1]
+		}
+	}
+	return runtimeEnv, nil
+}
+
 func main() {
 	flag.Parse()
 
-	// 读取指定的文件路径
-	fmt.Println("Loading domain list from:", *filePath)
-	list, err := Load(*filePath)
+	var dir string
+	var err error
+	if *dataPath != "" {
+		dir = *dataPath
+	} else {
+		goPath, envErr := getRuntimeEnv("GOPATH")
+		if envErr != nil {
+			fmt.Println("Failed: please set '$GOPATH' manually, or use 'datapath' option to specify the path to your custom 'data' directory")
+			return
+		}
+		if goPath == "" {
+			goPath = build.Default.GOPATH
+		}
+		fmt.Println("Use $GOPATH:", goPath)
+		fmt.Printf("Searching directory '%s' in '%s'...\n", defaultDataPath, goPath)
+		dir, err = DetectPath(goPath)
+	}
 	if err != nil {
-		fmt.Println("Failed to load domain list:", err)
+		fmt.Println("Failed: ", err)
 		return
 	}
+	fmt.Println("Use domain lists in", dir)
 
-	// 解析域名列表并转换为 Protobuf 格式
-	pl, err := ParseList(list, nil)
+	ref := make(map[string]*List)
+	err = filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if info.IsDir() {
+			return nil
+		}
+		list, err := Load(path)
+		if err != nil {
+			return err
+		}
+		ref[list.Name] = list
+		return nil
+	})
 	if err != nil {
-		fmt.Println("Failed to parse domain list:", err)
+		fmt.Println("Failed: ", err)
 		return
 	}
+	protoList := new(router.GeoSiteList)
+	for _, list := range ref {
+		pl, err := ParseList(list, ref)
+		if err != nil {
+			fmt.Println("Failed: ", err)
+			return
+		}
+		site, err := pl.toProto()
+		if err != nil {
+			fmt.Println("Failed: ", err)
+			return
+		}
+		protoList.Entry = append(protoList.Entry, site)
+	}
 
-	site, err := pl.toProto()
+	protoBytes, err := proto.Marshal(protoList)
 	if err != nil {
-		fmt.Println("Failed to convert to proto:", err)
+		fmt.Println("Failed:", err)
 		return
 	}
-
-	// 生成并保存二进制文件
-	protoList := &router.GeoSiteList{Entry: []*router.GeoSite{site}}
-	data, err := proto.Marshal(protoList)
-	if err != nil {
-		fmt.Println("Error marshaling proto:", err)
-		return
+	if err := ioutil.WriteFile("adblock_geosite.dat", protoBytes, 0777); err != nil {
+		fmt.Println("Failed: ", err)
+	} else {
+		fmt.Println("adblock_geosite.dat has been generated successfully in the directory. You can rename 'adblock_geosite.dat' to 'geosite.dat' and use it in V2Ray.")
 	}
-
-	output := "adblock_geosite.dat"
-	if err := ioutil.WriteFile(output, data, 0644); err != nil {
-		fmt.Println("Error writing to file:", err)
-		return
-	}
-
-	fmt.Println("GeoSite file generated:", output)
 }
