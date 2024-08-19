@@ -5,7 +5,6 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"go/build"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -13,11 +12,6 @@ import (
 
 	"v2ray.com/core/app/router"
 	"github.com/golang/protobuf/proto"
-)
-
-var (
-	dataPath        = flag.String("datapath", "", "Path to your custom 'data' directory")
-	defaultDataPath = "src/github.com/v2ray/domain-list-community/data"
 )
 
 type Entry struct {
@@ -29,57 +23,6 @@ type Entry struct {
 type List struct {
 	Name  string
 	Entry []Entry
-}
-
-type ParsedList struct {
-	Name      string
-	Inclusion map[string]bool
-	Entry     []Entry
-}
-
-func (l *ParsedList) toProto() (*router.GeoSite, error) {
-	site := &router.GeoSite{
-		CountryCode: l.Name,
-	}
-	for _, entry := range l.Entry {
-		switch entry.Type {
-		case "domain":
-			site.Domain = append(site.Domain, &router.Domain{
-				Type:      router.Domain_Domain,
-				Value:     entry.Value,
-				Attribute: entry.Attrs,
-			})
-		case "regexp":
-			site.Domain = append(site.Domain, &router.Domain{
-				Type:      router.Domain_Regex,
-				Value:     entry.Value,
-				Attribute: entry.Attrs,
-			})
-		case "keyword":
-			site.Domain = append(site.Domain, &router.Domain{
-				Type:      router.Domain_Plain,
-				Value:     entry.Value,
-				Attribute: entry.Attrs,
-			})
-		case "full":
-			site.Domain = append(site.Domain, &router.Domain{
-				Type:      router.Domain_Full,
-				Value:     entry.Value,
-				Attribute: entry.Attrs,
-			})
-		default:
-			return nil, errors.New("unknown domain type: " + entry.Type)
-		}
-	}
-	return site, nil
-}
-
-func removeComment(line string) string {
-	idx := strings.Index(line, "#")
-	if idx == -1 {
-		return line
-	}
-	return strings.TrimSpace(line[:idx])
 }
 
 func parseDomain(domain string, entry *Entry) error {
@@ -105,7 +48,7 @@ func parseAttribute(attr string) (router.Domain_Attribute, error) {
 		return attribute, errors.New("invalid attribute: " + attr)
 	}
 
-	attr = attr[1:]  // 去掉 @ 符号
+	attr = attr[1:]
 	parts := strings.Split(attr, "=")
 	if len(parts) == 1 {
 		attribute.Key = strings.ToLower(parts[0])
@@ -145,17 +88,12 @@ func parseEntry(line string) (Entry, error) {
 	return entry, nil
 }
 
-func DetectPath(path string) (string, error) {
-	arrPath := strings.Split(path, string(filepath.ListSeparator))
-	for _, content := range arrPath {
-		fullPath := filepath.Join(content, defaultDataPath)
-		_, err := os.Stat(fullPath)
-		if err == nil || os.IsExist(err) {
-			return fullPath, nil
-		}
+func removeComment(line string) string {
+	idx := strings.Index(line, "#")
+	if idx == -1 {
+		return line
 	}
-	err := fmt.Errorf("directory '%s' not found in '$GOPATH'", defaultDataPath)
-	return "", err
+	return strings.TrimSpace(line[:idx])
 }
 
 func Load(path string) (*List, error) {
@@ -185,145 +123,74 @@ func Load(path string) (*List, error) {
 	return list, nil
 }
 
-func ParseList(list *List, ref map[string]*List) (*ParsedList, error) {
-	pl := &ParsedList{
-		Name:      list.Name,
-		Inclusion: make(map[string]bool),
+func (l *List) toProto() (*router.GeoSite, error) {
+	site := &router.GeoSite{
+		CountryCode: l.Name,
 	}
-	entryList := list.Entry
-	for {
-		newEntryList := make([]Entry, 0, len(entryList))
-		hasInclude := false
-		for _, entry := range entryList {
-			if entry.Type == "include" {
-				if pl.Inclusion[entry.Value] {
-					continue
-				}
-				refName := strings.ToUpper(entry.Value)
-				pl.Inclusion[refName] = true
-				r := ref[refName]
-				if r == nil {
-					return nil, errors.New(entry.Value + " not found.")
-				}
-				newEntryList = append(newEntryList, r.Entry...)
-				hasInclude = true
-			} else {
-				newEntryList = append(newEntryList, entry)
-			}
-		}
-		entryList = newEntryList
-		if !hasInclude {
-			break
-		}
-	}
-	pl.Entry = entryList
-
-	return pl, nil
-}
-
-func envFile() (string, error) {
-	if file := os.Getenv("GOENV"); file != "" {
-		if file == "off" {
-			return "", fmt.Errorf("GOENV=off")
-		}
-		return file, nil
-	}
-	dir, err := os.UserConfigDir()
-	if err != nil {
-		return "", err
-	}
-	if dir == "" {
-		return "", fmt.Errorf("missing user-config dir")
-	}
-	return filepath.Join(dir, "go", "env"), nil
-}
-
-func getRuntimeEnv(key string) (string, error) {
-	file, err := envFile()
-	if err != nil {
-		return "", err
-	}
-	if file == "" {
-		return "", fmt.Errorf("missing runtime env file")
-	}
-	var data []byte
-	var runtimeEnv string
-	data, err = os.ReadFile(file)
-	envStrings := strings.Split(string(data), "\n")
-	for _, envItem := range envStrings {
-		envItem = strings.TrimSuffix(envItem, "\r")
-		envKeyValue := strings.Split(envItem, "=")
-		if strings.ToLower(envKeyValue[0]) == strings.ToLower(key) {
-			runtimeEnv = envKeyValue[1]
+	for _, entry := range l.Entry {
+		switch entry.Type {
+		case "domain":
+			site.Domain = append(site.Domain, &router.Domain{
+				Type:      router.Domain_Domain,
+				Value:     entry.Value,
+				Attribute: entry.Attrs,
+			})
+		case "regexp":
+			site.Domain = append(site.Domain, &router.Domain{
+				Type:      router.Domain_Regex,
+				Value:     entry.Value,
+				Attribute: entry.Attrs,
+			})
+		case "keyword":
+			site.Domain = append(site.Domain, &router.Domain{
+				Type:      router.Domain_Plain,
+				Value:     entry.Value,
+				Attribute: entry.Attrs,
+			})
+		case "full":
+			site.Domain = append(site.Domain, &router.Domain{
+				Type:      router.Domain_Full,
+				Value:     entry.Value,
+				Attribute: entry.Attrs,
+			})
+		default:
+			return nil, errors.New("unknown domain type: " + entry.Type)
 		}
 	}
-	return runtimeEnv, nil
+	return site, nil
 }
 
 func main() {
 	flag.Parse()
 
-	var dir string
-	var err error
-	if *dataPath != "" {
-		dir = *dataPath
-	} else {
-		goPath := build.Default.GOPATH
-		fmt.Println("Use $GOPATH:", goPath)
-		fmt.Printf("Searching directory '%s' in '%s'...\n", defaultDataPath, goPath)
-		dir, err = DetectPath(goPath)
-	}
-	if err != nil {
-		fmt.Println("Failed: ", err)
-		return
-	}
-	fmt.Println("Use domain lists in", dir)
+	inputFile := "adblock_reject_domain_geosite.txt"
+	outputFile := "adblock_geosite.dat"
 
-	ref := make(map[string]*List)
-	err = filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-		if info.IsDir() {
-			return nil
-		}
-		list, err := Load(path)
-		if err != nil {
-			return err
-		}
-		ref[list.Name] = list
-		return nil
-	})
+	list, err := Load(inputFile)
 	if err != nil {
-		fmt.Println("Failed: ", err)
+		fmt.Println("Failed to load input file:", err)
 		return
 	}
 
-	protoList := new(router.GeoSiteList)
-	for _, list := range ref {
-		pl, err := ParseList(list, ref)
-		if err != nil {
-			fmt.Println("Failed: ", err)
-			return
-		}
-		site, err := pl.toProto()
-		if err != nil {
-			fmt.Println("Failed: ", err)
-			return
-		}
-		protoList.Entry = append(protoList.Entry, site)
+	site, err := list.toProto()
+	if err != nil {
+		fmt.Println("Failed to convert to proto:", err)
+		return
 	}
 
-	// 将 protoList 序列化为字节数组
+	protoList := &router.GeoSiteList{
+		Entry: []*router.GeoSite{site},
+	}
+
 	protoBytes, err := proto.Marshal(protoList)
 	if err != nil {
-		fmt.Println("Failed:", err)
+		fmt.Println("Failed to marshal proto:", err)
 		return
 	}
-	// 写入文件
-	if err := os.WriteFile("adblock_geosite.dat", protoBytes, 0777); err != nil {
-		fmt.Println("Failed: ", err)
+
+	if err := os.WriteFile(outputFile, protoBytes, 0777); err != nil {
+		fmt.Println("Failed to write output file:", err)
 	} else {
-		fmt.Println("adblock_geosite.dat has been generated successfully in the directory.")
+		fmt.Println(outputFile, "has been generated successfully.")
 	}
 }
