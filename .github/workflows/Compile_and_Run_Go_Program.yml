@@ -1,4 +1,4 @@
-name: Compile, Run Go Program and Push
+name: Compile and Run Go Program
 
 on:
   schedule:
@@ -20,6 +20,7 @@ jobs:
 
     - name: Initialize Go module
       run: |
+        go mod init mymodule  # 初始化 Go 模块
         go mod tidy  # 清理并获取依赖
 
     - name: Build the Go program
@@ -28,22 +29,10 @@ jobs:
     - name: Run the Go program
       run: ./generate_geosite  # 运行生成的可执行文件
 
-    - name: Check if the file exists
+    - name: Commit and push .dat file
       run: |
-        if [ ! -f "adblock_geosite.dat" ]; then
-          echo "adblock_geosite.dat does not exist."
-          exit 1
-        fi
-
-    - name: Configure Git
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Actions"
-
-    - name: Commit and Push changes
-      run: |
+        git config --local user.email "you@example.com"
+        git config --local user.name "Your Name"
         git add adblock_geosite.dat
-        git commit -m "Add adblock_geosite.dat"
-        git push https://x-access-token=${{ secrets.TOKEN }}@github.com/${{ github.repository }} HEAD:main
-      env:
-        TOKEN: ${{ secrets.TOKEN }}
+        git commit -m "Add generated adblock_geosite.dat"
+        git push
