@@ -1,4 +1,4 @@
-name: Compile_and_Run_Go_Program
+name: Compile and Run Go Program
 
 on:
   schedule:
@@ -20,7 +20,8 @@ jobs:
 
     - name: Initialize Go module
       run: |
-        go mod tidy  # 确保 go.mod 和 go.sum 是最新的
+        go mod init adblock_geosite  # 初始化 Go 模块
+        go mod tidy  # 清理并获取依赖
 
     - name: Build the Go program
       run: go build -o generate_geosite main.go  # 编译生成可执行文件
