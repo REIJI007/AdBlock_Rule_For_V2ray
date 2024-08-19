@@ -32,9 +32,19 @@ jobs:
           cd mymodule
           go run main.go
 
+      - name: List directory contents after running main.go
+        run: |
+          ls -la mymodule
+          ls -la  # 查看根目录，确保文件已生成
+
       - name: Move adblock_geosite.dat to root
         run: |
-          mv mymodule/adblock_geosite.dat .  # 将文件移动到仓库根目录
+          if [ -f mymodule/adblock_geosite.dat ]; then
+            mv mymodule/adblock_geosite.dat .  # 将文件移动到仓库根目录
+          else
+            echo "adblock_geosite.dat not found"
+            exit 1
+          fi
 
       - name: Configure Git
         run: |
