@@ -1,5 +1,4 @@
 name: Compile_and_Run_Go_Program
-
 on:
   schedule:
     - cron: "*/20 * * * *"  # 每 20 分钟运行一次
@@ -8,41 +7,38 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3  # 检出仓库代码
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # 获取完整的 git 历史
 
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: '1.21'  # 替换为你的 Go 版本
+        go-version: '1.21'  # 使用您需要的 Go 版本
 
     - name: Initialize Go module
       run: |
-        go mod init mymodule  # 初始化 Go 模块
-        go mod tidy  # 清理并获取依赖
+        go mod init github.com/${{ github.repository }}
+        go mod tidy
 
-    - name: Build the Go program
-      run: go build -o generate_geosite main.go  # 编译生成可执行文件
-
-    - name: Run the Go program
-      run: ./generate_geosite  # 运行生成的可执行文件
+    - name: Build and Run Go program
+      run: |
+        go build -o generate_geosite
+        ./generate_geosite
 
     - name: Commit and push .dat file
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
       run: |
-        git config --global user.email "you@example.com"
-        git config --global user.name "Your Name"
-
-        # 检查文件是否存在
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "github-actions[bot]"
+        
         if [ -f adblock_geosite.dat ]; then
-          git add adblock_geosite.dat
-          git commit -m "Add generated adblock_geosite.dat"
-          
-          # 强制推送到本仓库的根目录
-          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git HEAD:main
+          git add adblock_geosite.dat generate_geosite go.mod go.sum
+          git commit -m "Add generated files and Go module files"
+          git push
         else
           echo "File adblock_geosite.dat does not exist. Skipping commit."
         fi
