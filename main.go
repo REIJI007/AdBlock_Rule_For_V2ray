@@ -160,7 +160,7 @@ func main() {
 		fmt.Println("Failed to marshal proto:", err)
 		return
 	}
-	if err := ioutil.WriteFile(outputFilePath, protoBytes, 0777); err != nil {
+	if err := os.WriteFile(outputFilePath, protoBytes, 0777); err != nil {
 		fmt.Println("Failed to write file:", err)
 	} else {
 		fmt.Println("adblock_geosite.dat has been generated successfully.")
