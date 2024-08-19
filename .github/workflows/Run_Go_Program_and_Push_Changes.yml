@@ -1,0 +1,52 @@
+name: Run_Go_Program_and_Push_Changes
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # 手动触发工作流
+  schedule:
+    - cron: '*/20 * * * *' # 每20分钟运行一次
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: '1.20' # 指定Go版本
+
+    - name: Cache Go modules
+      uses: actions/cache@v3
+      with:
+        path: | 
+          **/go/pkg/mod
+          **/go.sum
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+
+    - name: Install dependencies
+      run: go mod tidy
+
+    - name: Run Go program
+      run: go run main.go
+
+    - name: Configure Git
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+
+    - name: Commit and push changes
+      run: |
+        git add adblock_geosite.dat
+        git commit -m "Update adblock_geosite.dat"
+        git push
+      # 这里需要你设置一个 GitHub Token 以便有权限推送更改
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
