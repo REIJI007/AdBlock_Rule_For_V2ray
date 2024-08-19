@@ -18,6 +18,10 @@ jobs:
       with:
         go-version: '1.21'  # 替换为你的 Go 版本
 
+    - name: Initialize Go module
+      run: |
+        go mod tidy  # 确保 go.mod 和 go.sum 是最新的
+
     - name: Build the Go program
       run: go build -o generate_geosite main.go  # 编译生成可执行文件
 
