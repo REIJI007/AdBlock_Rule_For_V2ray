@@ -129,7 +129,7 @@ func Load(path string) (*List, error) {
 
 func main() {
 	inputFilePath := "adblock_reject_domain_geosite.txt"
-	outputFilePath := "geosite.dat"
+	outputFilePath := "adblock.dat"
 
 	list, err := Load(inputFilePath)
 	if err != nil {
@@ -151,6 +151,6 @@ func main() {
 	if err := os.WriteFile(outputFilePath, protoBytes, 0777); err != nil {
 		fmt.Println("Failed to write file:", err)
 	} else {
-		fmt.Println("geosite.dat has been generated successfully.")
+		fmt.Println("adblock.dat has been generated successfully.")
 	}
 }
