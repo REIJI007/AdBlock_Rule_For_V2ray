@@ -1,0 +1,22 @@
+name: Run_Conversion
+
+on:
+  schedule:
+    # 定时任务，每20分钟运行一次
+    - cron: '*/20 * * * *'
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21' # 使用你需要的Go版本
+
+    - name: Run conversion script
+      run: go run main.go
