@@ -138,7 +138,7 @@ func Load(path string) (*List, error) {
 func main() {
 	// 目标文件路径，假设当前工作目录为仓库根目录
 	inputFilePath := "adblock_reject_domain_geosite.txt"
-	outputFilePath := "adblock_geosite.dat"
+	outputFilePath := "adblock.dat"
 
 	// 加载并解析输入文件
 	list, err := Load(inputFilePath)
@@ -163,6 +163,6 @@ func main() {
 	if err := os.WriteFile(outputFilePath, protoBytes, 0777); err != nil {
 		fmt.Println("Failed to write file:", err)
 	} else {
-		fmt.Println("adblock_geosite.dat has been generated successfully.")
+		fmt.Println("adblock.dat has been generated successfully.")
 	}
 }
