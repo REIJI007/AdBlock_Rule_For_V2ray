@@ -38,12 +38,15 @@ jobs:
         git config --global user.name "github-actions"
         git config --global user.email "github-actions@github.com"
 
-    - name: Stash changes
-      run: |
-        git stash --include-untracked
+    - name: Reset adblock.dat to remote version
+      run: git checkout origin/main -- adblock.dat
 
     - name: Pull remote changes
       run: git pull --rebase
+
+    - name: Stash changes
+      run: |
+        git stash --include-untracked
 
     - name: Apply stashed changes
       run: git stash pop || echo "No changes to apply"
