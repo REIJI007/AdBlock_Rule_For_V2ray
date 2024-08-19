@@ -6,7 +6,7 @@ on:
   workflow_dispatch: # 允许手动触发
 
 jobs:
-  build-and-push:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -34,30 +34,5 @@ jobs:
 
       - name: List directory contents after running main.go
         run: |
-          ls -la mymodule
+          echo "Listing contents of root:"
           ls -la  # 查看根目录，确保文件已生成
-
-      - name: Verify if adblock_geosite.dat is present
-        run: |
-          if [ -f adblock_geosite.dat ]; then
-            echo "adblock_geosite.dat found"
-          else
-            echo "adblock_geosite.dat not found"
-            exit 1
-          fi
-
-      - name: Configure Git
-        run: |
-          git config user.name "GitHub Action"
-          git config user.email "action@github.com"
-
-      - name: Force Add and Commit file  # 强制添加并提交adblock_geosite.dat文件
-        run: |
-          git add -f adblock_geosite.dat  # 强制添加 adblock_geosite.dat 文件
-          git commit -m 'Update adblock_geosite.dat' || echo "No changes to commit"
-
-      - name: Push file  # 推送adblock_geosite.dat文件
-        env:
-          TOKEN: ${{ secrets.TOKEN }}  # 使用 GitHub 密钥进行身份验证
-        run: |
-          git push --force-with-lease "https://${TOKEN}@github.com/${{ github.repository }}.git" HEAD:${{ github.ref }}
