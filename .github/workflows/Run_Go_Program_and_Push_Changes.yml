@@ -38,25 +38,23 @@ jobs:
         git config --global user.name "github-actions"
         git config --global user.email "github-actions@github.com"
 
-    - name: Reset adblock.dat to remote version
-      run: git checkout origin/main -- adblock.dat
-
-    - name: Pull remote changes
-      run: git pull --rebase
-
     - name: Stash changes
       run: |
         git stash --include-untracked
+
+    - name: Pull remote changes
+      run: git pull --rebase
 
     - name: Apply stashed changes
       run: git stash pop || echo "No changes to apply"
 
     - name: Force add adblock.dat
-      run: git add -f adblock.dat
+      run: |
+        git add -f adblock.dat
 
     - name: Commit and push changes
       run: |
-        git commit -m "Update adblock.dat" || echo "No changes to commit"
+        git commit -m "Update adblock.dat" --allow-empty
         git push --force
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
