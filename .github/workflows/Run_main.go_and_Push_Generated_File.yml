@@ -31,7 +31,10 @@ jobs:
         run: |
           cd mymodule
           go run main.go
-          mv adblock_geosite.dat ../adblock_geosite.dat  # 移动生成的文件到仓库根目录
+
+      - name: Move adblock_geosite.dat to root
+        run: |
+          mv mymodule/adblock_geosite.dat .  # 将文件移动到仓库根目录
 
       - name: Configure Git
         run: |
@@ -40,13 +43,11 @@ jobs:
 
       - name: Force Add and Commit file  # 强制添加并提交adblock_geosite.dat文件
         run: |
-          git add -f ../adblock_geosite.dat  # 强制添加 adblock_geosite.dat 文件
+          git add -f adblock_geosite.dat  # 强制添加 adblock_geosite.dat 文件
           git commit -m 'Update adblock_geosite.dat' || echo "No changes to commit"
 
-      - name: Retry Push file  # 推送adblock_geosite.dat文件，失败时重试
+      - name: Push file  # 推送adblock_geosite.dat文件
         env:
           TOKEN: ${{ secrets.TOKEN }}  # 使用 GitHub 密钥进行身份验证
         run: |
-          for i in {1..5}; do  # 尝试最多5次
-            git push --force-with-lease "https://${TOKEN}@github.com/${{ github.repository }}.git" HEAD:${{ github.ref }}" && break || (echo "Push failed, retrying in 10 seconds..." && sleep 10)
-          done
+          git push --force-with-lease "https://${TOKEN}@github.com/${{ github.repository }}.git" HEAD:${{ github.ref }}
