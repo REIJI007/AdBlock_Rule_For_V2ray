@@ -1,0 +1,31 @@
+name: Compile_and_Run_Go_Program
+
+on:
+  schedule:
+    - cron: "*/20 * * * *"  # 每 20 分钟运行一次
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3  # 检出仓库代码
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'  # 替换为你的 Go 版本
+
+    - name: Build the Go program
+      run: go build -o generate_geosite .  # 编译生成可执行文件
+
+    - name: Run the Go program
+      run: ./generate_geosite  # 运行生成的可执行文件
+
+    - name: Upload generated file
+      uses: actions/upload-artifact@v3
+      with:
+        name: adblock_geosite_dat
+        path: adblock_geosite.dat  # 上传生成的二进制文件
