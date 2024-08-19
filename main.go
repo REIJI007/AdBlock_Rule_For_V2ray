@@ -55,7 +55,7 @@ func parseAttribute(attr string) (router.Domain_Attribute, error) {
 
 	attr = attr[1:]
 	parts := strings.Split(attr, "=")
-	if len(parts) == 1) {
+	if len(parts) == 1} {
 		attribute.Key = strings.ToLower(parts[0])
 		attribute.TypedValue = &router.Domain_Attribute_BoolValue{BoolValue: true}
 	} else {
