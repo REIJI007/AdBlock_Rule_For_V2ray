@@ -18,13 +18,6 @@ jobs:
         with:
           go-version: '1.20'  # 根据你的 Go 版本调整
 
-      - name: Initialize Go module
-        run: |
-          if [ ! -f go.mod ]; then
-            go mod init your-module-name  # 替换为你的模块名称
-          fi
-          go mod tidy  # 安装和清理依赖项
-
       - name: Run main.go
         run: go run main.go
 
@@ -32,6 +25,11 @@ jobs:
         run: |
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
+
+      - name: Pull latest changes
+        run: |
+          git fetch origin
+          git merge origin/main
 
       - name: Commit and Push changes
         env:
