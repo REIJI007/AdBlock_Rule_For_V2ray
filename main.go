@@ -8,6 +8,7 @@ import (
 	"go/build"
 	"io/ioutil"
 	"os"
+	"path/filepath"  
 	"strconv"
 	"strings"
 
