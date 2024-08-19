@@ -37,12 +37,21 @@ jobs:
           ls -la mymodule
           ls -la  # 查看根目录，确保文件已生成
 
+      - name: Verify if adblock_geosite.dat is present
+        run: |
+          if [ -f mymodule/adblock_geosite.dat ]; then
+            echo "adblock_geosite.dat found"
+          else
+            echo "adblock_geosite.dat not found"
+            exit 1
+          fi
+
       - name: Move adblock_geosite.dat to root
         run: |
           if [ -f mymodule/adblock_geosite.dat ]; then
             mv mymodule/adblock_geosite.dat .  # 将文件移动到仓库根目录
           else
-            echo "adblock_geosite.dat not found"
+            echo "adblock_geosite.dat not found for moving"
             exit 1
           fi
 
