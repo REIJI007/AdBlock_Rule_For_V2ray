@@ -40,8 +40,8 @@ jobs:
 
     - name: Commit and push changes
       run: |
-        git add adblock_geosite.dat
-        git commit -m "Update adblock_geosite.dat" || echo "No changes to commit"
+        git add adblock.dat
+        git commit -m "Update adblock.dat" || echo "No changes to commit"
         git push
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
