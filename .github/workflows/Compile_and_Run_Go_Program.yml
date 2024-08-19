@@ -18,6 +18,11 @@ jobs:
       with:
         go-version: '1.21'  # 替换为你的 Go 版本
 
+    - name: Initialize Go module
+      run: |
+        go mod init mymodule  # 初始化 Go 模块
+        go mod tidy  # 清理并获取依赖
+
     - name: Build the Go program
       run: go build -o generate_geosite main.go  # 编译生成可执行文件
 
