@@ -1,4 +1,4 @@
-name: Run_Go_Program_and_Push_Changes
+name: Run Go Program and Push Changes
 
 on:
   push:
