@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bufio"  // 确保导入了 bufio 包
+	"bufio" // 确保导入了 bufio 包
 	"errors"
 	"flag"
 	"fmt"
@@ -170,6 +170,14 @@ func (l *List) toProto() (*router.GeoSite, error) {
 
 func main() {
 	flag.Parse()
+
+	// 打印当前工作目录
+	cwd, err := os.Getwd()
+	if err != nil {
+		fmt.Println("Failed to get current working directory:", err)
+		return
+	}
+	fmt.Println("Current working directory:", cwd)
 
 	// 定义输入文件名
 	inputFile := "adblock_reject_domain_geosite.txt"
