@@ -18,6 +18,10 @@ jobs:
         with:
           go-version: '1.20'  # 根据你的 Go 版本调整
 
+      - name: Set up dependencies
+        run: |
+          go mod tidy  # 安装和清理依赖项
+
       - name: Run main.go
         run: go run main.go
 
