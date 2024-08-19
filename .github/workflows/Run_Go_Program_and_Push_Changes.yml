@@ -35,8 +35,8 @@ jobs:
 
     - name: Configure Git
       run: |
-        git config --global user.name "github-actions"
-        git config --global user.email "github-actions@github.com"
+        git config --global user.name 'github-actions'  # 配置提交用户名
+        git config --global user.email 'github-actions@github.com'  # 配置提交邮箱
 
     - name: Stash changes
       run: |
@@ -48,13 +48,15 @@ jobs:
     - name: Apply stashed changes
       run: git stash pop || echo "No changes to apply"
 
-    - name: Force add adblock.dat
+    - name: Force Add and Commit adblock.dat file  # 强制添加并提交 adblock.dat 文件
       run: |
-        git add -f adblock.dat
+        git add -f adblock.dat  # 强制添加 adblock.dat 文件
+        git commit -m 'Update adblock.dat' || git commit --allow-empty -m 'Empty commit to force push'  # 提交更改，若无更改则提交空更改
 
-    - name: Commit and push changes
-      run: |
-        git commit -m "Update adblock.dat" --allow-empty
-        git push --force
+    - name: Retry Push adblock.dat file  # 推送 adblock.dat 文件，失败时重试
       env:
-        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        TOKEN: ${{ secrets.TOKEN }}  # 使用 GitHub 密钥进行身份验证
+      run: |
+        for i in {1..5}; do  # 尝试最多5次
+          git push --force origin HEAD && exit 0 || (echo "Push failed, retrying in 10 seconds..." && sleep 10)
+        done
