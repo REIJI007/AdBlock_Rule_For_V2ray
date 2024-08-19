@@ -37,10 +37,17 @@ jobs:
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
 
-      - name: Commit and Push changes
-        env:
-          TOKEN: ${{ secrets.TOKEN }}
-        run: |
-          git add adblock_geosite.dat
-          git commit -m "Update adblock_geosite.dat from GitHub Action"
-          git push --force-with-lease "https://${TOKEN}@github.com/${{ github.repository }}.git" HEAD:${{ github.ref }}
+      - name: Force Add and Commit file  # 强制添加并提交adblock_geosite.dat文件
+      run: |
+        git config --global user.name 'github-actions'  # 配置提交用户名
+        git config --global user.email 'github-actions@github.com'  # 配置提交邮箱
+        git add -f adblock_geosite.dat  # 强制添加 adblock_geosite.dat 文件
+        git commit -m 'Update adblock_geosite.dat' || git commit --allow-empty -m 'Empty commit to force push'  # 提交更改，若无更改则提交空更改
+
+    - name: Retry Push file  # 推送adblock_geosite.dat文件，失败时重试
+      env:
+        TOKEN: ${{ secrets.TOKEN }}  # 使用 GitHub 密钥进行身份验证
+      run: |
+        for i in {1..5}; do  # 尝试最多5次
+          git push --force origin HEAD && exit 0 || (echo "Push failed, retrying in 10 seconds..." && sleep 10)
+        done
