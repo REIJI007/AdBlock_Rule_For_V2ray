@@ -1,4 +1,4 @@
-name: Compile and Run Go Program
+name: Compile_and_Run_Go_Program
 
 on:
   schedule:
@@ -35,11 +35,13 @@ jobs:
       run: |
         git config --global user.email "you@example.com"
         git config --global user.name "Your Name"
-        
+
         # 检查文件是否存在
         if [ -f adblock_geosite.dat ]; then
           git add adblock_geosite.dat
           git commit -m "Add generated adblock_geosite.dat"
+          
+          # 强制推送到本仓库的根目录
           git push https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git HEAD:main
         else
           echo "File adblock_geosite.dat does not exist. Skipping commit."
