@@ -5,6 +5,8 @@ on:
     # 定时任务，每20分钟运行一次
     - cron: '*/20 * * * *'
 
+  workflow_dispatch:  # 支持手动触发
+
 jobs:
   convert:
     runs-on: ubuntu-latest
