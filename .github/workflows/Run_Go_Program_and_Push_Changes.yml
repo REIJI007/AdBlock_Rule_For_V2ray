@@ -38,8 +38,15 @@ jobs:
         git config --global user.name "github-actions"
         git config --global user.email "github-actions@github.com"
 
+    - name: Stash changes
+      run: |
+        git stash --include-untracked
+
     - name: Pull remote changes
       run: git pull --rebase
+
+    - name: Apply stashed changes
+      run: git stash pop || echo "No changes to apply"
 
     - name: Commit and push changes
       run: |
