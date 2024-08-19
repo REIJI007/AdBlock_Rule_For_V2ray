@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -54,7 +55,7 @@ func parseAttribute(attr string) (router.Domain_Attribute, error) {
 
 	attr = attr[1:]
 	parts := strings.Split(attr, "=")
-	if len(parts) == 1 {
+	if len(parts) == 1) {
 		attribute.Key = strings.ToLower(parts[0])
 		attribute.TypedValue = &router.Domain_Attribute_BoolValue{BoolValue: true}
 	} else {
@@ -168,12 +169,31 @@ func (l *List) toProto() (*router.GeoSite, error) {
 	return site, nil
 }
 
+// getRepoRoot 函数获取当前Git仓库的根目录
+func getRepoRoot() (string, error) {
+	cmd := exec.Command("git", "rev-parse", "--show-toplevel")
+	output, err := cmd.Output()
+	if err != nil {
+		return "", err
+	}
+	return strings.TrimSpace(string(output)), nil
+}
+
 func main() {
 	flag.Parse()
 
-	// 定义输入和输出文件名
+	// 获取仓库根目录
+	repoRoot, err := getRepoRoot()
+	if err != nil {
+		fmt.Println("Failed to get repository root:", err)
+		return
+	}
+
+	// 定义输入文件名
 	inputFile := "adblock_reject_domain_geosite.txt"
-	outputFile := "adblock_geosite.dat"
+
+	// 定义输出文件路径到仓库根目录
+	outputFile := filepath.Join(repoRoot, "adblock_geosite.dat")
 
 	// 从输入文件加载数据
 	list, err := Load(inputFile)
@@ -205,6 +225,6 @@ func main() {
 	if err := os.WriteFile(outputFile, protoBytes, 0777); err != nil {
 		fmt.Println("Failed to write output file:", err)
 	} else {
-		fmt.Println(outputFile, "has been generated successfully.")
+		fmt.Println(outputFile, "has been generated successfully at the repository root.")
 	}
 }
