@@ -44,7 +44,7 @@
 
 
 
-```json
+```conf
 {
  "outbounds": 
    [
