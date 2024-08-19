@@ -41,7 +41,6 @@ jobs:
     - name: Commit and push changes
       run: |
         git add adblock.dat
-        git commit -m "Update adblock.dat" || echo "No changes to commit"
-        git push
+        git diff --cached --quiet || (git commit -m "Update adblock.dat" && git push)
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
