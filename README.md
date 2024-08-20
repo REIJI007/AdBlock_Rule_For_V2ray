@@ -45,6 +45,7 @@
 
 
 ```conf
+
 {
  "outbounds": 
    [
@@ -85,6 +86,8 @@
 
   *使用方式二：将下面对应格式的配置文件中"outbounds"字段和"routing"字段内容添加到你的json配置文件中，注意"outbounds"与"routing"之间的配合，下载的资源文件路径需和和 v2ray 文件同路径*
 <hr>
+
+
 ```conf
 {
     "outbounds": 
