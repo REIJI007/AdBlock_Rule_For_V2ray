@@ -85,10 +85,6 @@
 
   *使用方式二：将下面对应格式的配置文件中"outbounds"字段和"routing"字段内容添加到你的json配置文件中，注意"outbounds"与"routing"之间的配合，下载的资源文件路径需和和 v2ray 文件同路径*
 <hr>
-
-
-
-
 ```conf
 {
     "outbounds": 
@@ -110,11 +106,10 @@
                     "ext:adblock.dat:adblock"  // 引用 adblock.dat 文件中的 adblock 标签
                 ],
                 "outboundTag": "adblock"  // 匹配到的域名流量会被路由到名为 adblock 的 outboundTag 出站
-            }
-        ]
+           }
+       ]
     }
 }
-
 ```
 <hr>
 
