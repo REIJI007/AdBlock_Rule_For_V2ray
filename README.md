@@ -84,7 +84,7 @@
   *使用方式一：下载releases中的adblock_reject_domain.txt文件，修改V2ray的json配置中的"routing"字段下的"domain"部分*
 
 
-  *使用方式二：下载adblock.dat文件到V2ray同目录下，将下面对应格式的配置文件中"outbounds"字段和"routing"字段内容添加到你的json配置文件中，注意"outbounds"与"routing"之间的配合*
+  *使用方式二：下载adblock.dat文件到V2ray同目录下，将下面对应格式的配置文件中"outbounds"字段和"routing"字段内容添加到你的json配置文件中，注意"outbounds"与"routing"之间的配合，注意去掉注释，"route.rules"和 "route.rule_set"中的 "tag" 值需要保持一致*
 <hr>
 
 
