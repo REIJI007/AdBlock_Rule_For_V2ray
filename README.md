@@ -152,7 +152,7 @@
 
 12、HyperADRules (https://github.com/Lynricsy/HyperADRules)
 
-13、xinggsf <br>(https://github.com/xinggsf/Adblock-Plus-Rule)
+13、xinggsf (https://github.com/xinggsf/Adblock-Plus-Rule)
 
 
 ## LICENSE
