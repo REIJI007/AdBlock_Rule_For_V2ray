@@ -128,35 +128,31 @@
 
 **七、特别鸣谢**
 
-1、anti-AD (https://github.com/privacy-protection-tools/anti-AD)
+1、anti-AD<br>(https://github.com/privacy-protection-tools/anti-AD)<br>
+2、easylist<br>(https://github.com/easylist/easylist)<br>
+3、cjxlist<br>(https://github.com/cjx82630/cjxlist)<br>
+4、uniartisan<br>(https://github.com/uniartisan/adblock_list)<br>
+5、Cats-Team<br>(https://github.com/Cats-Team/AdRules)<br>
+6、217heidai<br>(https://github.com/217heidai/adblockfilters)<br>
+7、GOODBYEADS<br>(https://github.com/8680/GOODBYEADS)<br>
+8、AWAvenue-Ads-Rule<br>(https://github.com/TG-Twilight/AWAvenue-Ads-Rule)<br>
+9、Bibaiji<br>(https://github.com/Bibaiji/ad-rules/)<br>
+10、uBlockOrigin<br>(https://github.com/uBlockOrigin/uAssets)<br>
+11、ADguardTeam<br>(https://github.com/AdguardTeam/AdGuardFilters)<br>
+12、HyperADRules<br>(https://github.com/Lynricsy/HyperADRules)<br>
+13、guandasheng<br>(https://github.com/guandasheng/adguardhome)<br>
+14、xinggsf<br>(https://github.com/xinggsf/Adblock-Plus-Rule)<br>
+15、superbigsteam<br>(https://github.com/superbigsteam/adguardhomeguiz)<br>
+16、hoshsadiq<br>(https://github.com/hoshsadiq/adblock-nocoin-list)<br>
+17、jerryn70<br>(https://github.com/jerryn70/GoodbyeAds)<br>
+18、malware-filter<br>(https://gitlab.com/malware-filter)<br>
+19、abp-filters<br>(https://gitlab.com/eyeo/anti-cv/abp-filters-anti-cv)<br>
+20、banbendalao<br>(https://github.com/banbendalao/ADgk)<br>
+21、yokoffing<br>(https://github.com/yokoffing/filterlists)<br>
+22、notracking<br>(https://github.com/notracking/hosts-blocklists)<br>
+23、Spam404<br>(https://github.com/Spam404/lists)<br>
+24、brave<br>(https://github.com/brave/adblock-lists)<br>
 
-2、easylist (https://github.com/easylist/easylist)
-
-3、cjxlist (https://github.com/cjx82630/cjxlist)
-
-4、uniartisan (https://github.com/uniartisan/adblock_list)
-
-5、Cats-Team (https://github.com/Cats-Team/AdRules)
-
-6、217heidai (https://github.com/217heidai/adblockfilters)
-
-7、GOODBYEADS (https://github.com/8680/GOODBYEADS)
-
-8、AWAvenue-Ads-Rule (https://github.com/TG-Twilight/AWAvenue-Ads-Rule)
-
-9、Bibaiji (https://github.com/Bibaiji/ad-rules/)
-
-10、uBlockOrigin (https://github.com/uBlockOrigin/uAssets)
-
-11、ADguardTeam (https://github.com/AdguardTeam/AdGuardFilters)
-
-12、HyperADRules (https://github.com/Lynricsy/HyperADRules)
-
-13、guandasheng (https://github.com/guandasheng/adguardhome)
-
-14、xinggsf (https://github.com/xinggsf/Adblock-Plus-Rule)
-
-15、superbigsteam (https://github.com/superbigsteam/adguardhomeguiz)
 
 
 ## LICENSE
