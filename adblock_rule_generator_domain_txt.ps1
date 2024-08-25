@@ -1,6 +1,8 @@
 # Title: AdBlock_Rule_For_V2ray
 # Description: 适用于V2ray的域名拦截列表，每20分钟更新一次，确保即时同步上游减少误杀
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
+# LICENSE1：https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL3.0
+# LICENSE2：https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC%20BY-NC-SA%204.0
 
 # 定义广告过滤器URL列表
 $urlList = @(
@@ -88,7 +90,6 @@ $urlList = @(
 "https://raw.githubusercontent.com/brave/adblock-lists/master/brave-lists/brave-firstparty.txt",
 "https://raw.githubusercontent.com/brave/adblock-lists/master/brave-lists/brave-firstparty-cname.txt",
 "https://raw.githubusercontent.com/brave/adblock-lists/master/brave-unbreak.txt"
-
 )
 
 # 日志文件路径
@@ -151,9 +152,8 @@ foreach ($url in $urlList) {
 # 排除以 @@|| 开头规则中提取的域名
 $finalRules = $uniqueRules | Where-Object { -not $excludedDomains.Contains($_) }
 
-
 # 对规则进行排序并添加前缀和后缀
-$formattedRules = $uniqueRules | Sort-Object | ForEach-Object {
+$formattedRules = $finalRules | Sort-Object | ForEach-Object {
     $quote = "`""
     "$quote" + "$_$quote,"
 }
@@ -164,7 +164,7 @@ if ($formattedRules.Count -gt 0) {
 }
 
 # 统计生成的规则条目数量
-$ruleCount = $uniqueRules.Count
+$ruleCount = $finalRules.Count
 
 # 获取当前东八区时间
 $timeZoneInfo = [System.TimeZoneInfo]::FindSystemTimeZoneById("China Standard Time")
