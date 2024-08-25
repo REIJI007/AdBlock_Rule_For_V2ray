@@ -63,9 +63,9 @@
          "type": "field",
          "domain": 
          [
-             "domain:example.com1",   // 在这里替换要拦截出站的广告域名,注意最后一个广告条目不用加逗号
-             "domain:example.com2",
-             "domain:example.com3"
+             "example.com1",   // 在这里替换要拦截出站的广告域名,注意最后一个广告条目不用加逗号
+             "example.com2",
+             "example.com3"
          ],
          "outboundTag": "adblock"  // 匹配到的域名流量会被路由到名为adblock的outboundTag出站
        }
