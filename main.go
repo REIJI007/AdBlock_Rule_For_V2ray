@@ -6,11 +6,12 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strconv"
 	"strings"
 
-	"github.com/golang/protobuf/proto"
-	"v2ray.com/core/app/router"
+	router "github.com/v2fly/v2ray-core/v5/app/router/routercommon"
+	"google.golang.org/protobuf/proto"
 )
 
 type Entry struct {
@@ -38,7 +39,7 @@ func (l *ParsedList) toProto() (*router.GeoSite, error) {
 		switch entry.Type {
 		case "domain":
 			site.Domain = append(site.Domain, &router.Domain{
-				Type:      router.Domain_Domain,
+				Type:      router.Domain_RootDomain,
 				Value:     entry.Value,
 				Attribute: entry.Attrs,
 			})
@@ -92,13 +93,13 @@ func parseDomain(domain string, entry *Entry) error {
 	return errors.New("Invalid format: " + domain)
 }
 
-func parseAttribute(attr string) (router.Domain_Attribute, error) {
+func parseAttribute(attr string) (*router.Domain_Attribute, error) {
 	var attribute router.Domain_Attribute
 	if len(attr) == 0 || attr[0] != '@' {
-		return attribute, errors.New("invalid attribute: " + attr)
+		return &attribute, errors.New("invalid attribute: " + attr)
 	}
 
-	attr = attr[0:]
+	attr = attr[1:]
 	parts := strings.Split(attr, "=")
 	if len(parts) == 1 {
 		attribute.Key = strings.ToLower(parts[0])
@@ -107,11 +108,11 @@ func parseAttribute(attr string) (router.Domain_Attribute, error) {
 		attribute.Key = strings.ToLower(parts[0])
 		intv, err := strconv.Atoi(parts[1])
 		if err != nil {
-			return attribute, errors.New("invalid attribute: " + attr + ": " + err.Error())
+			return &attribute, errors.New("invalid attribute: " + attr + ": " + err.Error())
 		}
 		attribute.TypedValue = &router.Domain_Attribute_IntValue{IntValue: int64(intv)}
 	}
-	return attribute, nil
+	return &attribute, nil
 }
 
 func parseEntry(line string) (Entry, error) {
@@ -132,7 +133,7 @@ func parseEntry(line string) (Entry, error) {
 		if err != nil {
 			return entry, err
 		}
-		entry.Attrs = append(entry.Attrs, &attr)
+		entry.Attrs = append(entry.Attrs, attr)
 	}
 
 	return entry, nil
@@ -165,57 +166,104 @@ func Load(path string) (*List, error) {
 	return list, nil
 }
 
-func ParseList(list *List) (*ParsedList, error) {
+func ParseList(list *List, ref map[string]*List) (*ParsedList, error) {
 	pl := &ParsedList{
 		Name:      list.Name,
 		Inclusion: make(map[string]bool),
 	}
-	pl.Entry = list.Entry
+	entryList := list.Entry
+	for {
+		newEntryList := make([]Entry, 0, len(entryList))
+		hasInclude := false
+		for _, entry := range entryList {
+			if entry.Type == "include" {
+				refName := strings.ToUpper(entry.Value)
+				if entry.Attrs != nil {
+					for _, attr := range entry.Attrs {
+						InclusionName := strings.ToUpper(refName + "@" + attr.Key)
+						if pl.Inclusion[InclusionName] {
+							continue
+						}
+						pl.Inclusion[InclusionName] = true
+
+						refList := ref[refName]
+						if refList == nil {
+							return nil, errors.New(entry.Value + " not found.")
+						}
+						attrEntrys := createIncludeAttrEntrys(refList, attr)
+						if len(attrEntrys) != 0 {
+							newEntryList = append(newEntryList, attrEntrys...)
+						}
+					}
+				} else {
+					InclusionName := refName
+					if pl.Inclusion[InclusionName] {
+						continue
+					}
+					pl.Inclusion[InclusionName] = true
+					refList := ref[refName]
+					if refList == nil {
+						return nil, errors.New(entry.Value + " not found.")
+					}
+					newEntryList = append(newEntryList, refList.Entry...)
+				}
+				hasInclude = true
+			} else {
+				newEntryList = append(newEntryList, entry)
+			}
+		}
+		entryList = newEntryList
+		if !hasInclude {
+			break
+		}
+	}
+	pl.Entry = entryList
+
 	return pl, nil
 }
 
 func main() {
-	// 设置输入和输出文件路径
-	inputFilePath := "adblock.txt"
-	outputFilePath := "adblock.dat"
+	// 设置文件路径
+	inputFile := "adblock.txt"
+	outputFile := "adblock.dat"
 
-	// 加载 adblock.txt 文件
-	list, err := Load(inputFilePath)
+	ref := make(map[string]*List)
+	list, err := Load(inputFile)
 	if err != nil {
-		fmt.Println("Failed to load file:", err)
-		return
+		fmt.Println("Failed: ", err)
+		os.Exit(1)
+	}
+	ref[list.Name] = list
+
+	protoList := new(router.GeoSiteList)
+	for refName, list := range ref {
+		pl, err := ParseList(list, ref)
+		if err != nil {
+			fmt.Println("Failed: ", err)
+			os.Exit(1)
+		}
+		site, err := pl.toProto()
+		if err != nil {
+			fmt.Println("Failed: ", err)
+			os.Exit(1)
+		}
+		protoList.Entry = append(protoList.Entry, site)
 	}
 
-	// 解析列表
-	pl, err := ParseList(list)
-	if err != nil {
-		fmt.Println("Failed to parse list:", err)
-		return
-	}
+	// Sort protoList so the marshaled list is reproducible
+	sort.SliceStable(protoList.Entry, func(i, j int) bool {
+		return protoList.Entry[i].CountryCode < protoList.Entry[j].CountryCode
+	})
 
-	// 转换为 protobuf 格式
-	site, err := pl.toProto()
-	if err != nil {
-		fmt.Println("Failed to convert to protobuf:", err)
-		return
-	}
-
-	// 创建 protobuf 列表并添加条目
-	protoList := &router.GeoSiteList{
-		Entry: []*router.GeoSite{site},
-	}
-
-	// 序列化为字节数组
 	protoBytes, err := proto.Marshal(protoList)
 	if err != nil {
-		fmt.Println("Failed to marshal protobuf:", err)
-		return
+		fmt.Println("Failed:", err)
+		os.Exit(1)
 	}
-
-	// 写入 adblock.dat 文件
-	if err := os.WriteFile(outputFilePath, protoBytes, 0777); err != nil {
-		fmt.Println("Failed to write output file:", err)
+	if err := os.WriteFile(outputFile, protoBytes, 0644); err != nil {
+		fmt.Println("Failed: ", err)
+		os.Exit(1)
 	} else {
-		fmt.Println("adblock.dat has been generated successfully.")
+		fmt.Println(outputFile, "has been generated successfully.")
 	}
 }
