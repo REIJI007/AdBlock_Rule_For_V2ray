@@ -16,10 +16,11 @@ import (
 )
 
 var (
-	dataFilePath = flag.String("datafilepath", "/adblock.txt", "Path to your 'adblock.txt' file")
+	dataFilePath = flag.String("datafilepath", "adblock.txt", "Path to your 'adblock.txt' file")
 	outputName   = flag.String("outputname", "adblock.dat", "Name of the generated dat file")
 	outputDir    = flag.String("outputdir", "./", "Directory to place all generated files")
 )
+
 
 type Entry struct {
 	Type  string
