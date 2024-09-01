@@ -8,8 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"google.golang.org/protobuf/proto"
-	"github.com/your/repo/protobuf/domainpb" // 假设你有一个用于序列化的 Protobuf package
+	"github.com/golang/protobuf/proto"
 )
 
 var (
