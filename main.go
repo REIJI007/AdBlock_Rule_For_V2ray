@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/golang/protobuf/proto"
+	"github.com/your/repo/protobuf/domainpb" // 假设你有一个用于序列化的 Protobuf package
 )
 
 var (
