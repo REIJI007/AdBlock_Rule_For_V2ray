@@ -16,10 +16,9 @@ import (
 )
 
 var (
-	dataPath    = flag.String("datapath", "/", "Path to your custom 'data' directory") // 根目录
-	outputName  = flag.String("outputname", "adblock.dat", "Name of the generated dat file") // 输出文件名为 adblock.dat
-	outputDir   = flag.String("outputdir", "./", "Directory to place all generated files")
-	exportLists = flag.String("exportlists", "", "Lists to be flattened and exported in plaintext format, separated by ',' comma")
+	dataFilePath = flag.String("datafilepath", "/adblock.txt", "Path to your 'adblock.txt' file")
+	outputName   = flag.String("outputname", "adblock.dat", "Name of the generated dat file")
+	outputDir    = flag.String("outputdir", "./", "Directory to place all generated files")
 )
 
 type Entry struct {
@@ -49,7 +48,6 @@ func (l *ParsedList) toPlainText(listName string) error {
 			}
 			attrString = strings.TrimRight(":"+attrString, ",")
 		}
-		// Entry output format is: type:domain.tld:@attr1,@attr2
 		entryBytes = append(entryBytes, []byte(entry.Type+":"+entry.Value+attrString+"\n")...)
 	}
 	if err := os.WriteFile(filepath.Join(*outputDir, listName+".txt"), entryBytes, 0644); err != nil {
@@ -138,7 +136,6 @@ func parseAttribute(attr string) (*router.Domain_Attribute, error) {
 		return &attribute, errors.New("invalid attribute: " + attr)
 	}
 
-	// Trim attribute prefix `@` character
 	attr = attr[1:]
 	parts := strings.Split(attr, "=")
 	if len(parts) == 1 {
@@ -179,7 +176,7 @@ func parseEntry(line string) (Entry, error) {
 	return entry, nil
 }
 
-func Load(path string) (*List, error) {
+func LoadFile(path string) (*List, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -304,75 +301,34 @@ func ParseList(list *List, ref map[string]*List) (*ParsedList, error) {
 func main() {
 	flag.Parse()
 
-	dir := *dataPath
-	fmt.Println("Use domain lists in", dir)
+	fmt.Println("Reading domain list from", *dataFilePath)
 
-	ref := make(map[string]*List)
-	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-		if info.IsDir() {
-			return nil
-		}
-		list, err := Load(path)
-		if err != nil {
-			return err
-		}
-		ref[list.Name] = list
-		return nil
-	})
+	list, err := LoadFile(*dataFilePath)
 	if err != nil {
-		fmt.Println("Failed: ", err)
+		fmt.Println("Failed to load file:", err)
 		os.Exit(1)
 	}
 
-	// Create output directory if not exist
 	if _, err := os.Stat(*outputDir); os.IsNotExist(err) {
 		if mkErr := os.MkdirAll(*outputDir, 0755); mkErr != nil {
-			fmt.Println("Failed: ", mkErr)
+			fmt.Println("Failed:", mkErr)
 			os.Exit(1)
 		}
 	}
 
 	protoList := new(router.GeoSiteList)
-	var existList []string
-	for refName, list := range ref {
-		pl, err := ParseList(list, ref)
-		if err != nil {
-			fmt.Println("Failed: ", err)
-			os.Exit(1)
-		}
-		site, err := pl.toProto()
-		if err != nil {
-			fmt.Println("Failed: ", err)
-			os.Exit(1)
-		}
-		protoList.Entry = append(protoList.Entry, site)
-
-		// Flatten and export plaintext list
-		if *exportLists != "" {
-			if existList != nil {
-				exportPlainTextList(existList, refName, pl)
-			} else {
-				exportedListSlice := strings.Split(*exportLists, ",")
-				for _, exportedListName := range exportedListSlice {
-					fileName := filepath.Join(dir, exportedListName)
-					_, err := os.Stat(fileName)
-					if err == nil || os.IsExist(err) {
-						existList = append(existList, exportedListName)
-					} else {
-						fmt.Printf("'%s' list does not exist in '%s' directory.\n", exportedListName, dir)
-					}
-				}
-				if existList != nil {
-					exportPlainTextList(existList, refName, pl)
-				}
-			}
-		}
+	pl, err := ParseList(list, map[string]*List{list.Name: list})
+	if err != nil {
+		fmt.Println("Failed:", err)
+		os.Exit(1)
 	}
+	site, err := pl.toProto()
+	if err != nil {
+		fmt.Println("Failed:", err)
+		os.Exit(1)
+	}
+	protoList.Entry = append(protoList.Entry, site)
 
-	// Sort protoList so the marshaled list is reproducible
 	sort.SliceStable(protoList.Entry, func(i, j int) bool {
 		return protoList.Entry[i].CountryCode < protoList.Entry[j].CountryCode
 	})
@@ -383,7 +339,7 @@ func main() {
 		os.Exit(1)
 	}
 	if err := os.WriteFile(filepath.Join(*outputDir, *outputName), protoBytes, 0644); err != nil {
-		fmt.Println("Failed: ", err)
+		fmt.Println("Failed:", err)
 		os.Exit(1)
 	} else {
 		fmt.Println(*outputName, "has been generated successfully.")
