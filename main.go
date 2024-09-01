@@ -57,7 +57,7 @@ func (l *ParsedList) toPlainText(listName string) error {
 
 func (l *ParsedList) toProto() (*router.GeoSite, error) {
 	site := &router.GeoSite{
-		CountryCode: "adblock", // 强制设置为 adblock
+		CountryCode: "", // 设置为空字符串
 	}
 	for _, entry := range l.Entry {
 		switch entry.Type {
@@ -305,37 +305,36 @@ func main() {
 	}
 
 	if _, err := os.Stat(*outputDir); os.IsNotExist(err) {
-		if err := os.MkdirAll(*outputDir, os.ModePerm); err != nil {
-			fmt.Println("Failed to create output directory:", err)
-			os.Exit(1)
-		}
+		os.Mkdir(*outputDir, 0755)
 	}
 
-	parsedList, err := ParseList(list, nil)
+	ref := make(map[string]*List)
+	ref[list.Name] = list
+
+	parsedList, err := ParseList(list, ref)
 	if err != nil {
 		fmt.Println("Failed to parse list:", err)
 		os.Exit(1)
 	}
 
+	site, err := parsedList.toProto()
+	if err != nil {
+		fmt.Println("Failed to convert to protobuf:", err)
+		os.Exit(1)
+	}
+
+	siteBytes, err := proto.Marshal(site)
+	if err != nil {
+		fmt.Println("Failed to marshal protobuf:", err)
+		os.Exit(1)
+	}
+
+	if err := os.WriteFile(filepath.Join(*outputDir, *outputName), siteBytes, 0644); err != nil {
+		fmt.Println("Failed to write file:", err)
+		os.Exit(1)
+	}
+
 	exportPlainTextList("adblock", parsedList)
 
-	geoSite, err := parsedList.toProto()
-	if err != nil {
-		fmt.Println("Failed to convert to proto:", err)
-		os.Exit(1)
-	}
-
-	data, err := proto.Marshal(geoSite)
-	if err != nil {
-		fmt.Println("Failed to marshal proto:", err)
-		os.Exit(1)
-	}
-
-	outputPath := filepath.Join(*outputDir, *outputName)
-	if err := os.WriteFile(outputPath, data, 0644); err != nil {
-		fmt.Println("Failed to write dat file:", err)
-		os.Exit(1)
-	}
-
-	fmt.Println("Data file generated:", outputPath)
+	fmt.Printf("'%s' has been generated successfully.\n", *outputName)
 }
