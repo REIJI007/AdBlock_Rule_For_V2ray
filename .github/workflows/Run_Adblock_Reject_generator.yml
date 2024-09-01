@@ -1,4 +1,4 @@
-name: Run_Adblock_Reject_Geosite  # 工作流名称
+name: Run_Adblock_Reject_generator  # 工作流名称
 
 on:
   schedule:
