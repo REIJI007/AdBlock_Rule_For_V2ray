@@ -15,8 +15,8 @@ import (
 )
 
 var (
-	inputFile  = "adblock_reject_domain_geosite.txt" // 输入文件
-	outputFile = "adblock.dat"                        // 输出文件
+	inputFile  = "adblock.txt" // 输入文件
+	outputFile = "adblock.dat" // 输出文件
 )
 
 type Entry struct {
