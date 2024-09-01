@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"github.com/golang/protobuf/proto"
@@ -38,12 +39,13 @@ func (l *ParsedList) toProto() (*router.GeoSite, error) {
 		CountryCode: l.Name,
 	}
 	for _, entry := range l.Entry {
-		// 将所有域名条目类型设置为 domain
-		site.Domain = append(site.Domain, &router.Domain{
-			Type:      router.Domain_Domain,
-			Value:     entry.Value,
-			Attribute: entry.Attrs,
-		})
+		if entry.Type == "domain" { // 仅保留 "domain" 类型的域名条目
+			site.Domain = append(site.Domain, &router.Domain{
+				Type:      router.Domain_Domain,
+				Value:     entry.Value,
+				Attribute: entry.Attrs,
+			})
+		}
 	}
 	return site, nil
 }
@@ -57,20 +59,63 @@ func removeComment(line string) string {
 }
 
 func parseDomain(domain string, entry *Entry) error {
-	entry.Type = "domain" // 强制所有条目类型为 domain
-	entry.Value = strings.ToLower(domain)
-	return nil
+	kv := strings.Split(domain, ":")
+	if len(kv) == 1 {
+		entry.Type = "domain"
+		entry.Value = strings.ToLower(kv[0])
+		return nil
+	}
+
+	if len(kv) == 2 {
+		entry.Type = strings.ToLower(kv[0])
+		entry.Value = strings.ToLower(kv[1])
+		return nil
+	}
+
+	return errors.New("Invalid format: " + domain)
+}
+
+func parseAttribute(attr string) (router.Domain_Attribute, error) {
+	var attribute router.Domain_Attribute
+	if len(attr) == 0 || attr[0] != '@' {
+		return attribute, errors.New("invalid attribute: " + attr)
+	}
+
+	attr = attr[0:]
+	parts := strings.Split(attr, "=")
+	if len(parts) == 1 {
+		attribute.Key = strings.ToLower(parts[0])
+		attribute.TypedValue = &router.Domain_Attribute_BoolValue{BoolValue: true}
+	} else {
+		attribute.Key = strings.ToLower(parts[0])
+		intv, err := strconv.Atoi(parts[1])
+		if err != nil {
+			return attribute, errors.New("invalid attribute: " + attr + ": " + err.Error())
+		}
+		attribute.TypedValue = &router.Domain_Attribute_IntValue{IntValue: int64(intv)}
+	}
+	return attribute, nil
 }
 
 func parseEntry(line string) (Entry, error) {
 	line = strings.TrimSpace(line)
+	parts := strings.Split(line, " ")
+
 	var entry Entry
-	if len(line) == 0 {
+	if len(parts) == 0 {
 		return entry, errors.New("empty entry")
 	}
 
-	if err := parseDomain(line, &entry); err != nil {
+	if err := parseDomain(parts[0], &entry); err != nil {
 		return entry, err
+	}
+
+	for i := 1; i < len(parts); i++ {
+		attr, err := parseAttribute(parts[i])
+		if err != nil {
+			return entry, err
+		}
+		entry.Attrs = append(entry.Attrs, &attr)
 	}
 
 	return entry, nil
@@ -84,7 +129,7 @@ func Load(path string) (*List, error) {
 	defer file.Close()
 
 	list := &List{
-		Name: "adblock", // 统一名称为 adblock
+		Name: "adblock",
 	}
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
@@ -104,7 +149,7 @@ func Load(path string) (*List, error) {
 }
 
 func main() {
-	// 获取当前目录下的adblock_reject_domain_geosite.txt文件
+	// 获取当前目录下的 adblock_reject_domain_geosite.txt 文件
 	dir, err := os.Getwd()
 	if err != nil {
 		fmt.Println("Failed to get current directory:", err)
@@ -119,7 +164,7 @@ func main() {
 		return
 	}
 
-	// 解析并生成ProtoBuf
+	// 解析并生成 ProtoBuf
 	pl := &ParsedList{
 		Name:  list.Name,
 		Entry: list.Entry,
@@ -141,7 +186,7 @@ func main() {
 		return
 	}
 
-	// 将ProtoBuf数据写入adblock.dat文件
+	// 将 ProtoBuf 数据写入 adblock.dat 文件
 	if err := os.WriteFile(outputFileName, protoBytes, 0777); err != nil {
 		fmt.Println("Failed to write file:", err)
 	} else {
