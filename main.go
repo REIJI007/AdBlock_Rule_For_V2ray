@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -13,9 +14,9 @@ import (
 	"v2ray.com/core/app/router"
 )
 
-const (
-	inputFileName  = "adblock_reject_domain_geosite.txt" // 输入文件名
-	outputFileName = "adblock.dat"                       // 输出文件名
+var (
+	inputFile  = "adblock_reject_domain_geosite.txt" // 输入文件
+	outputFile = "adblock.dat"                        // 输出文件
 )
 
 type Entry struct {
@@ -30,8 +31,9 @@ type List struct {
 }
 
 type ParsedList struct {
-	Name  string
-	Entry []Entry
+	Name      string
+	Inclusion map[string]bool
+	Entry     []Entry
 }
 
 func (l *ParsedList) toProto() (*router.GeoSite, error) {
@@ -39,12 +41,33 @@ func (l *ParsedList) toProto() (*router.GeoSite, error) {
 		CountryCode: l.Name,
 	}
 	for _, entry := range l.Entry {
-		if entry.Type == "domain" { // 仅保留 "domain" 类型的域名条目
+		switch entry.Type {
+		case "domain":
 			site.Domain = append(site.Domain, &router.Domain{
 				Type:      router.Domain_Domain,
 				Value:     entry.Value,
 				Attribute: entry.Attrs,
 			})
+		case "regexp":
+			site.Domain = append(site.Domain, &router.Domain{
+				Type:      router.Domain_Regex,
+				Value:     entry.Value,
+				Attribute: entry.Attrs,
+			})
+		case "keyword":
+			site.Domain = append(site.Domain, &router.Domain{
+				Type:      router.Domain_Plain,
+				Value:     entry.Value,
+				Attribute: entry.Attrs,
+			})
+		case "full":
+			site.Domain = append(site.Domain, &router.Domain{
+				Type:      router.Domain_Full,
+				Value:     entry.Value,
+				Attribute: entry.Attrs,
+			})
+		default:
+			return nil, errors.New("unknown domain type: " + entry.Type)
 		}
 	}
 	return site, nil
@@ -129,7 +152,7 @@ func Load(path string) (*List, error) {
 	defer file.Close()
 
 	list := &List{
-		Name: "adblock",
+		Name: strings.ToUpper(filepath.Base(path)),
 	}
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
@@ -148,48 +171,77 @@ func Load(path string) (*List, error) {
 	return list, nil
 }
 
-func main() {
-	// 获取当前目录下的 adblock_reject_domain_geosite.txt 文件
-	dir, err := os.Getwd()
-	if err != nil {
-		fmt.Println("Failed to get current directory:", err)
-		return
-	}
-	filePath := filepath.Join(dir, inputFileName)
-
-	// 加载文件内容
-	list, err := Load(filePath)
-	if err != nil {
-		fmt.Println("Failed to load list:", err)
-		return
-	}
-
-	// 解析并生成 ProtoBuf
+func ParseList(list *List, ref map[string]*List) (*ParsedList, error) {
 	pl := &ParsedList{
-		Name:  list.Name,
-		Entry: list.Entry,
+		Name:      list.Name,
+		Inclusion: make(map[string]bool),
+	}
+	entryList := list.Entry
+	for {
+		newEntryList := make([]Entry, 0, len(entryList))
+		hasInclude := false
+		for _, entry := range entryList {
+			if entry.Type == "include" {
+				if pl.Inclusion[entry.Value] {
+					continue
+				}
+				refName := strings.ToUpper(entry.Value)
+				pl.Inclusion[refName] = true
+				r := ref[refName]
+				if r == nil {
+					return nil, errors.New(entry.Value + " not found.")
+				}
+				newEntryList = append(newEntryList, r.Entry...)
+				hasInclude = true
+			} else {
+				newEntryList = append(newEntryList, entry)
+			}
+		}
+		entryList = newEntryList
+		if !hasInclude {
+			break
+		}
+	}
+	pl.Entry = entryList
+
+	return pl, nil
+}
+
+func main() {
+	fmt.Println("Processing file:", inputFile)
+
+	list, err := Load(inputFile)
+	if err != nil {
+		fmt.Println("Failed to load input file:", err)
+		return
 	}
 
+	ref := make(map[string]*List)
+	ref[list.Name] = list
+
+	pl, err := ParseList(list, ref)
+	if err != nil {
+		fmt.Println("Failed to parse list:", err)
+		return
+	}
+
+	protoList := new(router.GeoSiteList)
 	site, err := pl.toProto()
 	if err != nil {
-		fmt.Println("Failed to convert to Proto:", err)
+		fmt.Println("Failed to convert to protobuf:", err)
 		return
 	}
-
-	protoList := &router.GeoSiteList{
-		Entry: []*router.GeoSite{site},
-	}
+	protoList.Entry = append(protoList.Entry, site)
 
 	protoBytes, err := proto.Marshal(protoList)
 	if err != nil {
-		fmt.Println("Failed to marshal Proto:", err)
+		fmt.Println("Failed to marshal protobuf:", err)
 		return
 	}
 
-	// 将 ProtoBuf 数据写入 adblock.dat 文件
-	if err := os.WriteFile(outputFileName, protoBytes, 0777); err != nil {
-		fmt.Println("Failed to write file:", err)
+	if err := ioutil.WriteFile(outputFile, protoBytes, 0777); err != nil {
+		fmt.Println("Failed to write output file:", err)
 	} else {
-		fmt.Println(outputFileName, "has been generated successfully.")
+		fmt.Println("Output file generated successfully:", outputFile)
 	}
 }
