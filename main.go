@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"errors"
+	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -12,6 +13,13 @@ import (
 
 	router "github.com/v2fly/v2ray-core/v5/app/router/routercommon"
 	"google.golang.org/protobuf/proto"
+)
+
+var (
+	dataPath    = flag.String("datapath", "/", "Path to your custom 'data' directory") // 根目录
+	outputName  = flag.String("outputname", "adblock.dat", "Name of the generated dat file") // 输出文件名为 adblock.dat
+	outputDir   = flag.String("outputdir", "./", "Directory to place all generated files")
+	exportLists = flag.String("exportlists", "", "Lists to be flattened and exported in plaintext format, separated by ',' comma")
 )
 
 type Entry struct {
@@ -29,6 +37,25 @@ type ParsedList struct {
 	Name      string
 	Inclusion map[string]bool
 	Entry     []Entry
+}
+
+func (l *ParsedList) toPlainText(listName string) error {
+	var entryBytes []byte
+	for _, entry := range l.Entry {
+		var attrString string
+		if entry.Attrs != nil {
+			for _, attr := range entry.Attrs {
+				attrString += "@" + attr.GetKey() + ","
+			}
+			attrString = strings.TrimRight(":"+attrString, ",")
+		}
+		// Entry output format is: type:domain.tld:@attr1,@attr2
+		entryBytes = append(entryBytes, []byte(entry.Type+":"+entry.Value+attrString+"\n")...)
+	}
+	if err := os.WriteFile(filepath.Join(*outputDir, listName+".txt"), entryBytes, 0644); err != nil {
+		return fmt.Errorf(err.Error())
+	}
+	return nil
 }
 
 func (l *ParsedList) toProto() (*router.GeoSite, error) {
@@ -68,6 +95,18 @@ func (l *ParsedList) toProto() (*router.GeoSite, error) {
 	return site, nil
 }
 
+func exportPlainTextList(list []string, refName string, pl *ParsedList) {
+	for _, listName := range list {
+		if strings.EqualFold(refName, listName) {
+			if err := pl.toPlainText(strings.ToLower(refName)); err != nil {
+				fmt.Println("Failed: ", err)
+				continue
+			}
+			fmt.Printf("'%s' has been generated successfully.\n", listName)
+		}
+	}
+}
+
 func removeComment(line string) string {
 	idx := strings.Index(line, "#")
 	if idx == -1 {
@@ -99,6 +138,7 @@ func parseAttribute(attr string) (*router.Domain_Attribute, error) {
 		return &attribute, errors.New("invalid attribute: " + attr)
 	}
 
+	// Trim attribute prefix `@` character
 	attr = attr[1:]
 	parts := strings.Split(attr, "=")
 	if len(parts) == 1 {
@@ -193,7 +233,7 @@ func isMatchAttr(Attrs []*router.Domain_Attribute, includeKey string) bool {
 	return isMatch
 }
 
-func createIncludeAttrEntries(list *List, matchAttr *router.Domain_Attribute) []Entry {
+func createIncludeAttrEntrys(list *List, matchAttr *router.Domain_Attribute) []Entry {
 	newEntryList := make([]Entry, 0, len(list.Entry))
 	matchName := matchAttr.Key
 	for _, entry := range list.Entry {
@@ -229,9 +269,9 @@ func ParseList(list *List, ref map[string]*List) (*ParsedList, error) {
 						if refList == nil {
 							return nil, errors.New(entry.Value + " not found.")
 						}
-						attrEntries := createIncludeAttrEntries(refList, attr)
-						if len(attrEntries) != 0 {
-							newEntryList = append(newEntryList, attrEntries...)
+						attrEntrys := createIncludeAttrEntrys(refList, attr)
+						if len(attrEntrys) != 0 {
+							newEntryList = append(newEntryList, attrEntrys...)
 						}
 					}
 				} else {
@@ -262,20 +302,42 @@ func ParseList(list *List, ref map[string]*List) (*ParsedList, error) {
 }
 
 func main() {
-	// 设置文件路径
-	inputFile := "adblock.txt"
-	outputFile := "adblock.dat"
+	flag.Parse()
+
+	dir := *dataPath
+	fmt.Println("Use domain lists in", dir)
 
 	ref := make(map[string]*List)
-	list, err := Load(inputFile)
+	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if info.IsDir() {
+			return nil
+		}
+		list, err := Load(path)
+		if err != nil {
+			return err
+		}
+		ref[list.Name] = list
+		return nil
+	})
 	if err != nil {
 		fmt.Println("Failed: ", err)
 		os.Exit(1)
 	}
-	ref[list.Name] = list
+
+	// Create output directory if not exist
+	if _, err := os.Stat(*outputDir); os.IsNotExist(err) {
+		if mkErr := os.MkdirAll(*outputDir, 0755); mkErr != nil {
+			fmt.Println("Failed: ", mkErr)
+			os.Exit(1)
+		}
+	}
 
 	protoList := new(router.GeoSiteList)
-	for _, list := range ref {
+	var existList []string
+	for refName, list := range ref {
 		pl, err := ParseList(list, ref)
 		if err != nil {
 			fmt.Println("Failed: ", err)
@@ -287,6 +349,27 @@ func main() {
 			os.Exit(1)
 		}
 		protoList.Entry = append(protoList.Entry, site)
+
+		// Flatten and export plaintext list
+		if *exportLists != "" {
+			if existList != nil {
+				exportPlainTextList(existList, refName, pl)
+			} else {
+				exportedListSlice := strings.Split(*exportLists, ",")
+				for _, exportedListName := range exportedListSlice {
+					fileName := filepath.Join(dir, exportedListName)
+					_, err := os.Stat(fileName)
+					if err == nil || os.IsExist(err) {
+						existList = append(existList, exportedListName)
+					} else {
+						fmt.Printf("'%s' list does not exist in '%s' directory.\n", exportedListName, dir)
+					}
+				}
+				if existList != nil {
+					exportPlainTextList(existList, refName, pl)
+				}
+			}
+		}
 	}
 
 	// Sort protoList so the marshaled list is reproducible
@@ -299,10 +382,10 @@ func main() {
 		fmt.Println("Failed:", err)
 		os.Exit(1)
 	}
-	if err := os.WriteFile(outputFile, protoBytes, 0644); err != nil {
+	if err := os.WriteFile(filepath.Join(*outputDir, *outputName), protoBytes, 0644); err != nil {
 		fmt.Println("Failed: ", err)
 		os.Exit(1)
 	} else {
-		fmt.Println(outputFile, "has been generated successfully.")
+		fmt.Println(*outputName, "has been generated successfully.")
 	}
 }
