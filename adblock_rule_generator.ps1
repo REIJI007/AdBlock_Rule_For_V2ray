@@ -173,8 +173,8 @@ foreach ($url in $urlList) {
 # 排除以 @@|| 开头规则中提取的域名
 $finalRules = $uniqueRules | Where-Object { -not $excludedDomains.Contains($_) }
 
-# 对规则进行排序加上后缀@ads
-$formattedRules = $finalRules | Sort-Object | ForEach-Object {"$_ @ads"}
+# 对规则进行排序
+$formattedRules = $finalRules | Sort-Object
 
 # 统计生成的规则条目数量
 $ruleCount = $finalRules.Count
