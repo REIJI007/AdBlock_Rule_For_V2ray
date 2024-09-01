@@ -146,9 +146,8 @@ func Load(path string) (*List, error) {
 	}
 	defer file.Close()
 
-	// Set the list name to "adblock"
 	list := &List{
-		Name: "adblock",
+		Name: strings.ToUpper(filepath.Base(path)),
 	}
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
