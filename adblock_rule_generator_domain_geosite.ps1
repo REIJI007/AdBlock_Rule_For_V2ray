@@ -197,7 +197,7 @@ $($formattedRules -join "`n")
 "@
 
 # 定义输出文件路径
-$outputPath = "$PSScriptRoot/adblock_reject_domain_geosite.txt"
+$outputPath = "$PSScriptRoot/adblock.txt"
 $textContent | Out-File -FilePath $outputPath -Encoding utf8
 
 # 输出生成的有效规则总数
