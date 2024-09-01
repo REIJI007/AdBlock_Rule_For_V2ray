@@ -21,7 +21,6 @@ var (
 	outputDir    = flag.String("outputdir", "./", "Directory to place all generated files")
 )
 
-
 type Entry struct {
 	Type  string
 	Value string
@@ -59,7 +58,7 @@ func (l *ParsedList) toPlainText(listName string) error {
 
 func (l *ParsedList) toProto() (*router.GeoSite, error) {
 	site := &router.GeoSite{
-		CountryCode: l.Name,
+		CountryCode: "adblock", // 强制设置为 adblock
 	}
 	for _, entry := range l.Entry {
 		switch entry.Type {
@@ -95,7 +94,7 @@ func (l *ParsedList) toProto() (*router.GeoSite, error) {
 }
 
 func exportPlainTextList(list []string, refName string, pl *ParsedList) {
-	for _, listName := range list {
+	for _, listName := int(list) {
 		if strings.EqualFold(refName, listName) {
 			if err := pl.toPlainText(strings.ToLower(refName)); err != nil {
 				fmt.Println("Failed: ", err)
@@ -311,38 +310,37 @@ func main() {
 	}
 
 	if _, err := os.Stat(*outputDir); os.IsNotExist(err) {
-		if mkErr := os.MkdirAll(*outputDir, 0755); mkErr != nil {
-			fmt.Println("Failed:", mkErr)
+		if err := os.MkdirAll(*outputDir, os.ModePerm); err != nil {
+			fmt.Println("Failed to create output directory:", err)
 			os.Exit(1)
 		}
 	}
 
-	protoList := new(router.GeoSiteList)
-	pl, err := ParseList(list, map[string]*List{list.Name: list})
+	parsedList, err := ParseList(list, nil)
 	if err != nil {
-		fmt.Println("Failed:", err)
+		fmt.Println("Failed to parse list:", err)
 		os.Exit(1)
 	}
-	site, err := pl.toProto()
-	if err != nil {
-		fmt.Println("Failed:", err)
-		os.Exit(1)
-	}
-	protoList.Entry = append(protoList.Entry, site)
 
-	sort.SliceStable(protoList.Entry, func(i, j int) bool {
-		return protoList.Entry[i].CountryCode < protoList.Entry[j].CountryCode
-	})
+	exportPlainTextList([]string{"adblock"}, parsedList)
 
-	protoBytes, err := proto.Marshal(protoList)
+	geoSite, err := parsedList.toProto()
 	if err != nil {
-		fmt.Println("Failed:", err)
+		fmt.Println("Failed to convert to proto:", err)
 		os.Exit(1)
 	}
-	if err := os.WriteFile(filepath.Join(*outputDir, *outputName), protoBytes, 0644); err != nil {
-		fmt.Println("Failed:", err)
+
+	data, err := proto.Marshal(geoSite)
+	if err != nil {
+		fmt.Println("Failed to marshal proto:", err)
 		os.Exit(1)
-	} else {
-		fmt.Println(*outputName, "has been generated successfully.")
 	}
+
+	outputPath := filepath.Join(*outputDir, *outputName)
+	if err := os.WriteFile(outputPath, data, 0644); err != nil {
+		fmt.Println("Failed to write dat file:", err)
+		os.Exit(1)
+	}
+
+	fmt.Println("Data file generated:", outputPath)
 }
