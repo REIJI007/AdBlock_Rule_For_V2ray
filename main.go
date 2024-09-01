@@ -166,6 +166,45 @@ func Load(path string) (*List, error) {
 	return list, nil
 }
 
+func isMatchAttr(Attrs []*router.Domain_Attribute, includeKey string) bool {
+	isMatch := false
+	mustMatch := true
+	matchName := includeKey
+	if strings.HasPrefix(includeKey, "!") {
+		isMatch = true
+		mustMatch = false
+		matchName = strings.TrimLeft(includeKey, "!")
+	}
+
+	for _, Attr := range Attrs {
+		attrName := Attr.Key
+		if mustMatch {
+			if matchName == attrName {
+				isMatch = true
+				break
+			}
+		} else {
+			if matchName == attrName {
+				isMatch = false
+				break
+			}
+		}
+	}
+	return isMatch
+}
+
+func createIncludeAttrEntries(list *List, matchAttr *router.Domain_Attribute) []Entry {
+	newEntryList := make([]Entry, 0, len(list.Entry))
+	matchName := matchAttr.Key
+	for _, entry := range list.Entry {
+		matched := isMatchAttr(entry.Attrs, matchName)
+		if matched {
+			newEntryList = append(newEntryList, entry)
+		}
+	}
+	return newEntryList
+}
+
 func ParseList(list *List, ref map[string]*List) (*ParsedList, error) {
 	pl := &ParsedList{
 		Name:      list.Name,
@@ -190,9 +229,9 @@ func ParseList(list *List, ref map[string]*List) (*ParsedList, error) {
 						if refList == nil {
 							return nil, errors.New(entry.Value + " not found.")
 						}
-						attrEntrys := createIncludeAttrEntrys(refList, attr)
-						if len(attrEntrys) != 0 {
-							newEntryList = append(newEntryList, attrEntrys...)
+						attrEntries := createIncludeAttrEntries(refList, attr)
+						if len(attrEntries) != 0 {
+							newEntryList = append(newEntryList, attrEntries...)
 						}
 					}
 				} else {
@@ -236,7 +275,7 @@ func main() {
 	ref[list.Name] = list
 
 	protoList := new(router.GeoSiteList)
-	for refName, list := range ref {
+	for _, list := range ref {
 		pl, err := ParseList(list, ref)
 		if err != nil {
 			fmt.Println("Failed: ", err)
