@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"sort"
 	"strconv"
 	"strings"
 
@@ -93,15 +92,11 @@ func (l *ParsedList) toProto() (*router.GeoSite, error) {
 	return site, nil
 }
 
-func exportPlainTextList(list []string, refName string, pl *ParsedList) {
-	for _, listName := int(list) {
-		if strings.EqualFold(refName, listName) {
-			if err := pl.toPlainText(strings.ToLower(refName)); err != nil {
-				fmt.Println("Failed: ", err)
-				continue
-			}
-			fmt.Printf("'%s' has been generated successfully.\n", listName)
-		}
+func exportPlainTextList(listName string, pl *ParsedList) {
+	if err := pl.toPlainText(strings.ToLower(listName)); err != nil {
+		fmt.Println("Failed: ", err)
+	} else {
+		fmt.Printf("'%s' has been generated successfully.\n", listName)
 	}
 }
 
@@ -322,7 +317,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	exportPlainTextList([]string{"adblock"}, parsedList)
+	exportPlainTextList("adblock", parsedList)
 
 	geoSite, err := parsedList.toProto()
 	if err != nil {
