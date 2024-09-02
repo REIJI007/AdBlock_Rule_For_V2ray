@@ -3,21 +3,15 @@ package main
 import (
 	"bufio"
 	"errors"
-	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strconv"
 	"strings"
 
 	router "github.com/v2fly/v2ray-core/v5/app/router/routercommon"
 	"google.golang.org/protobuf/proto"
-)
-
-var (
-	dataFilePath = flag.String("datafilepath", "adblock.txt", "Path to your 'adblock.txt' file")
-	outputName   = flag.String("outputname", "adblock.dat", "Name of the generated dat file")
-	outputDir    = flag.String("outputdir", "./", "Directory to place all generated files")
 )
 
 type Entry struct {
@@ -37,27 +31,9 @@ type ParsedList struct {
 	Entry     []Entry
 }
 
-func (l *ParsedList) toPlainText(listName string) error {
-	var entryBytes []byte
-	for _, entry := range l.Entry {
-		var attrString string
-		if entry.Attrs != nil {
-			for _, attr := range entry.Attrs {
-				attrString += "@" + attr.GetKey() + ","
-			}
-			attrString = strings.TrimRight(":"+attrString, ",")
-		}
-		entryBytes = append(entryBytes, []byte(entry.Type+":"+entry.Value+attrString+"\n")...)
-	}
-	if err := os.WriteFile(filepath.Join(*outputDir, listName+".txt"), entryBytes, 0644); err != nil {
-		return fmt.Errorf(err.Error())
-	}
-	return nil
-}
-
 func (l *ParsedList) toProto() (*router.GeoSite, error) {
 	site := &router.GeoSite{
-		CountryCode: "", // 设置为空字符串
+		CountryCode: l.Name,
 	}
 	for _, entry := range l.Entry {
 		switch entry.Type {
@@ -92,14 +68,6 @@ func (l *ParsedList) toProto() (*router.GeoSite, error) {
 	return site, nil
 }
 
-func exportPlainTextList(listName string, pl *ParsedList) {
-	if err := pl.toPlainText(strings.ToLower(listName)); err != nil {
-		fmt.Println("Failed: ", err)
-	} else {
-		fmt.Printf("'%s' has been generated successfully.\n", listName)
-	}
-}
-
 func removeComment(line string) string {
 	idx := strings.Index(line, "#")
 	if idx == -1 {
@@ -131,6 +99,7 @@ func parseAttribute(attr string) (*router.Domain_Attribute, error) {
 		return &attribute, errors.New("invalid attribute: " + attr)
 	}
 
+	// Trim attribute prefix `@` character
 	attr = attr[1:]
 	parts := strings.Split(attr, "=")
 	if len(parts) == 1 {
@@ -171,7 +140,7 @@ func parseEntry(line string) (Entry, error) {
 	return entry, nil
 }
 
-func LoadFile(path string) (*List, error) {
+func Load(path string) (*List, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -294,47 +263,55 @@ func ParseList(list *List, ref map[string]*List) (*ParsedList, error) {
 }
 
 func main() {
-	flag.Parse()
+	// 读取当前目录下的 adblock.txt 文件
+	filePath := "./adblock.txt"
+	fmt.Println("Reading domain list from", filePath)
 
-	fmt.Println("Reading domain list from", *dataFilePath)
-
-	list, err := LoadFile(*dataFilePath)
+	// 加载 adblock.txt 文件内容
+	list, err := Load(filePath)
 	if err != nil {
 		fmt.Println("Failed to load file:", err)
 		os.Exit(1)
 	}
 
-	if _, err := os.Stat(*outputDir); os.IsNotExist(err) {
-		os.Mkdir(*outputDir, 0755)
-	}
-
-	ref := make(map[string]*List)
-	ref[list.Name] = list
-
-	parsedList, err := ParseList(list, ref)
+	// 解析列表
+	pl, err := ParseList(list, make(map[string]*List))
 	if err != nil {
 		fmt.Println("Failed to parse list:", err)
 		os.Exit(1)
 	}
 
-	site, err := parsedList.toProto()
+	// 转换为 proto 格式并设置标签为 "adblock"
+	site, err := pl.toProto()
 	if err != nil {
-		fmt.Println("Failed to convert to protobuf:", err)
+		fmt.Println("Failed to convert to proto:", err)
 		os.Exit(1)
 	}
+	site.CountryCode = "adblock"
 
-	siteBytes, err := proto.Marshal(site)
+	// 创建 GeoSiteList 并添加 site
+	protoList := &router.GeoSiteList{
+		Entry: []*router.GeoSite{site},
+	}
+
+	// 排序以保证可重复生成
+	sort.SliceStable(protoList.Entry, func(i, j int) bool {
+		return protoList.Entry[i].CountryCode < protoList.Entry[j].CountryCode
+	})
+
+	// 序列化为 proto 数据
+	protoBytes, err := proto.Marshal(protoList)
 	if err != nil {
-		fmt.Println("Failed to marshal protobuf:", err)
+		fmt.Println("Failed to marshal proto:", err)
 		os.Exit(1)
 	}
 
-	if err := os.WriteFile(filepath.Join(*outputDir, *outputName), siteBytes, 0644); err != nil {
-		fmt.Println("Failed to write file:", err)
+	// 将序列化数据写入 adblock.dat 文件
+	outputFile := "./adblock.dat"
+	if err := os.WriteFile(outputFile, protoBytes, 0644); err != nil {
+		fmt.Println("Failed to write output file:", err)
 		os.Exit(1)
+	} else {
+		fmt.Println(outputFile, "has been generated successfully.")
 	}
-
-	exportPlainTextList("adblock", parsedList)
-
-	fmt.Printf("'%s' has been generated successfully.\n", *outputName)
 }
