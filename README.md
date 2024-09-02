@@ -15,7 +15,7 @@
     <img src="https://img.shields.io/github/license/REIJI007/AdBlock_Rule_For_V2ray" alt="license" style="margin-right: 10px;">
 </p>
 
-**一、从多个广告过滤器中提取拦截域名条目，删除重复项，并将它们转换为兼容V2ray的dat二进制文件，其中列表的每个条目都写成了形如"full:example.com"形式，一行仅一条规则。该列表可以用作V2ray的拦截域名路由文件，以阻止广告域名， powershell脚本和go转换程序每20分钟自动执行，并将生成的文件发布在release中.两个个文件的下载地址分别如下，其中adblock_reject_domain.txt由powershell脚本生成，adblock.dat则是由go转换程序将adblock_reject_domain_geosite.txt转化得来的dat二进制文件，该文件仅有一个域名类别```adblock```**
+**一、从多个广告过滤器中提取拦截域名条目，删除重复项，并将它们转换为兼容V2ray的dat二进制文件，其中列表的每个条目都写成了形如"full:example.com"形式，一行仅一条规则。该列表可以用作V2ray的拦截域名路由文件，以阻止广告域名， powershell脚本和go转换程序每20分钟自动执行，并将生成的文件发布在release中.两个个文件的下载地址分别如下，其中adblock_reject_domain.txt由powershell脚本生成，adblock.dat则是由go转换程序将adblock.txt转化得来的dat二进制文件，该文件仅有一个域名标签```adblock```**
 <br>
 <br>
 
