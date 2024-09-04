@@ -127,7 +127,7 @@
 
 <br>
 1、v2ray
-(https://github.com/v2fly/domain-list-community)<br>
+(https://github.com/v2fly/v2ray-core)<br>
 2、anti-AD
 (https://github.com/privacy-protection-tools/anti-AD)<br>
 3、easylist
