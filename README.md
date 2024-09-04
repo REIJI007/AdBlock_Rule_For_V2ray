@@ -105,8 +105,8 @@
                     "ext:adblock.dat:adblock"  // 引用 adblock.dat 文件中的 adblock 标签
                 ],
                 "outboundTag": "adblock"  // 匹配到的域名流量会被导流到名为 adblock 的 outboundTag 出站
-           }
-       ]
+            }
+        ]
     }
 }
 ```
