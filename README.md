@@ -56,7 +56,7 @@
    [
      {
        "protocol": "blackhole",
-       "tag": "adblock"          //此outboundTag出站配合下面的域名拦截路由
+       "tag": "adblock"          // 此outboundTag出站配合下面的域名拦截路由
      }
    ],
  "routing": 
