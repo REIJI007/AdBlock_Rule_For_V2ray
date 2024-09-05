@@ -16,8 +16,10 @@ import (
 )
 
 var (
-	outputName = flag.String("outputname", "adblock.dat", "Name of the generated dat file")
-	outputDir  = flag.String("outputdir", "./", "Directory to place the generated file")
+	dataPath    = flag.String("datapath", "./", "Path to your custom 'data' directory") // 默认路径为当前目录
+	outputName  = flag.String("outputname", "adblock.dat", "Name of the generated dat file") // 输出文件名为 adblock.dat
+	outputDir   = flag.String("outputdir", "./", "Directory to place all generated files") // 输出目录为当前目录
+	exportLists = flag.String("exportlists", "", "Lists to be flattened and exported in plaintext format, separated by ',' comma")
 )
 
 type Entry struct {
@@ -313,11 +315,13 @@ func main() {
 		if info.IsDir() {
 			return nil
 		}
-		list, err := Load(path)
-		if err != nil {
-			return err
+		if info.Name() == "adblock.txt" { // 只处理 adblock.txt 文件
+			list, err := Load(path)
+			if err != nil {
+				return err
+			}
+			ref[list.Name] = list
 		}
-		ref[list.Name] = list
 		return nil
 	})
 	if err != nil {
@@ -334,7 +338,6 @@ func main() {
 	}
 
 	protoList := new(router.GeoSiteList)
-	var existList []string
 	for refName, list := range ref {
 		pl, err := ParseList(list, ref)
 		if err != nil {
@@ -347,27 +350,6 @@ func main() {
 			os.Exit(1)
 		}
 		protoList.Entry = append(protoList.Entry, site)
-
-		// Flatten and export plaintext list
-		if *exportLists != "" {
-			if existList != nil {
-				exportPlainTextList(existList, refName, pl)
-			} else {
-				exportedListSlice := strings.Split(*exportLists, ",")
-				for _, exportedListName := range exportedListSlice {
-					fileName := filepath.Join(dir, exportedListName)
-					_, err := os.Stat(fileName)
-					if err == nil || os.IsExist(err) {
-						existList = append(existList, exportedListName)
-					} else {
-						fmt.Printf("'%s' list does not exist in '%s' directory.\n", exportedListName, dir)
-					}
-				}
-				if existList != nil {
-					exportPlainTextList(existList, refName, pl)
-				}
-			}
-		}
 	}
 
 	// Sort protoList so the marshaled list is reproducible
@@ -386,4 +368,3 @@ func main() {
 	} else {
 		fmt.Println(*outputName, "has been generated successfully.")
 	}
-}
