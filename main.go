@@ -37,7 +37,7 @@ type ParsedList struct {
 	Entry     []Entry
 }
 
-// 新增的函数，用于将 ParsedList 转换为纯文本（可选，如果需要）
+// 用于导出纯文本列表
 func (l *ParsedList) toPlainText(listName string) error {
 	var entryBytes []byte
 	for _, entry := range l.Entry {
@@ -54,6 +54,18 @@ func (l *ParsedList) toPlainText(listName string) error {
 		return fmt.Errorf(err.Error())
 	}
 	return nil
+}
+
+func exportPlainTextList(list []string, refName string, pl *ParsedList) {
+	for _, listName := range list {
+		if strings.EqualFold(refName, listName) {
+			if err := pl.toPlainText(strings.ToLower(refName)); err != nil {
+				fmt.Println("Failed: ", err)
+				continue
+			}
+			fmt.Printf("'%s' has been generated successfully.\n", listName)
+		}
+	}
 }
 
 func (l *ParsedList) toProto() (*router.GeoSite, error) {
@@ -124,7 +136,6 @@ func parseAttribute(attr string) (*router.Domain_Attribute, error) {
 		return &attribute, errors.New("invalid attribute: " + attr)
 	}
 
-	// Trim attribute prefix `@` character
 	attr = attr[1:]
 	parts := strings.Split(attr, "=")
 	if len(parts) == 1 {
@@ -294,56 +305,41 @@ func main() {
 	filePath := "./adblock.txt"
 	outputFile := filepath.Join(*outputDir, *outputName)
 
-	// 加载所有引用的列表，用于处理 include
-	ref := make(map[string]*List)
-	ref["ADBLOCK"] = nil // 预先定义，以防止自引用导致的问题
-
-	// 读取 adblock.txt 文件内容
-	fmt.Println("Reading domain list from", filePath)
+	// 载入adblock列表
 	list, err := Load(filePath)
 	if err != nil {
-		fmt.Println("Failed to load file:", err)
-		os.Exit(1)
+		fmt.Println("Failed to load the list:", err)
+		return
 	}
-	ref["ADBLOCK"] = list
 
-	// 解析列表，处理 include
-	pl, err := ParseList(list, ref)
+	// 将adblock列表解析成ParsedList
+	parsedList, err := ParseList(list, nil)
 	if err != nil {
-		fmt.Println("Failed to parse list:", err)
-		os.Exit(1)
+		fmt.Println("Failed to parse the list:", err)
+		return
 	}
 
-	// 转换为 proto 格式并设置标签为 "adblock"
-	site, err := pl.toProto()
+	// 导出纯文本格式
+	exportPlainTextList([]string{"adblock"}, "adblock", parsedList)
+
+	// 将ParsedList转换为Proto格式
+	geoSite, err := parsedList.toProto()
 	if err != nil {
-		fmt.Println("Failed to convert to proto:", err)
-		os.Exit(1)
-	}
-	site.CountryCode = "adblock"
-
-	// 创建 GeoSiteList 并添加 site
-	protoList := &router.GeoSiteList{
-		Entry: []*router.GeoSite{site},
+		fmt.Println("Failed to convert to Proto:", err)
+		return
 	}
 
-	// 排序以保证可重复生成
-	sort.SliceStable(protoList.Entry, func(i, j int) bool {
-		return protoList.Entry[i].CountryCode < protoList.Entry[j].CountryCode
-	})
-
-	// 序列化为 proto 数据
-	protoBytes, err := proto.Marshal(protoList)
+	// 序列化并保存到输出文件
+	data, err := proto.Marshal(geoSite)
 	if err != nil {
-		fmt.Println("Failed to marshal proto:", err)
-		os.Exit(1)
+		fmt.Println("Failed to marshal the data:", err)
+		return
 	}
 
-	// 写入 adblock.dat 文件
-	if err := os.WriteFile(outputFile, protoBytes, 0644); err != nil {
-		fmt.Println("Failed to write output file:", err)
-		os.Exit(1)
-	} else {
-		fmt.Println(outputFile, "has been generated successfully.")
+	if err := os.WriteFile(outputFile, data, 0644); err != nil {
+		fmt.Println("Failed to write the file:", err)
+		return
 	}
+
+	fmt.Println("GeoSite file generated successfully:", outputFile)
 }
