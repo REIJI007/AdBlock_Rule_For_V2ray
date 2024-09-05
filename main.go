@@ -14,16 +14,12 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
+
 var (
+	dataPath   = flag.String("datapath", ".", "Path to your custom 'data' directory (use '.' for root directory)")
 	outputDir  = flag.String("outputdir", "./", "Directory to place all generated files")
 	outputName = flag.String("outputname", "adblock.dat", "Name of the generated dat file")
 )
-
-
-
-
-
-
 
 
 
