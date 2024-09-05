@@ -15,10 +15,17 @@ import (
 )
 
 var (
-	dataPath   = flag.String("datapath", "./data", "Path to your custom 'data' directory")
 	outputDir  = flag.String("outputdir", "./", "Directory to place all generated files")
 	outputName = flag.String("outputname", "adblock.dat", "Name of the generated dat file")
 )
+
+
+
+
+
+
+
+
 
 type Entry struct {
 	Type  string
