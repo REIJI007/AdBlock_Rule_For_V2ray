@@ -302,70 +302,74 @@ func ParseList(list *List, ref map[string]*List) (*ParsedList, error) {
 }
 
 func main() {
-	flag.Parse()
+    flag.Parse()
 
-	dir := *dataPath
-	fmt.Println("Use domain lists in", dir)
+    dir := *dataPath
+    fmt.Println("Use domain lists in", dir)
 
-	ref := make(map[string]*List)
-	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-		if info.IsDir() {
-			return nil
-		}
-		if info.Name() == "adblock.txt" { // 只处理 adblock.txt 文件
-			list, err := Load(path)
-			if err != nil {
-				return err
-			}
-			ref[list.Name] = list
-		}
-		return nil
-	})
-	if err != nil {
-		fmt.Println("Failed: ", err)
-		os.Exit(1)
-	}
+    adblockList := &List{
+        Name: "adblock", // 将所有域名合并到名为 adblock 的列表中
+    }
 
-	// Create output directory if not exist
-	if _, err := os.Stat(*outputDir); os.IsNotExist(err) {
-		if mkErr := os.MkdirAll(*outputDir, 0755); mkErr != nil {
-			fmt.Println("Failed: ", mkErr)
-			os.Exit(1)
-		}
-	}
+    // 遍历所有文件，将域名合并到 adblockList
+    err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+        if err != nil {
+            return err
+        }
+        if info.IsDir() {
+            return nil
+        }
+        list, err := Load(path)
+        if err != nil {
+            return err
+        }
 
-	protoList := new(router.GeoSiteList)
-	for refName, list := range ref {
-		pl, err := ParseList(list, ref)
-		if err != nil {
-			fmt.Println("Failed: ", err)
-			os.Exit(1)
-		}
-		site, err := pl.toProto()
-		if err != nil {
-			fmt.Println("Failed: ", err)
-			os.Exit(1)
-		}
-		protoList.Entry = append(protoList.Entry, site)
-	}
+        // 将每个文件的域名条目追加到 adblockList
+        adblockList.Entry = append(adblockList.Entry, list.Entry...)
+        return nil
+    })
+    if err != nil {
+        fmt.Println("Failed: ", err)
+        os.Exit(1)
+    }
 
-	// Sort protoList so the marshaled list is reproducible
-	sort.SliceStable(protoList.Entry, func(i, j int) bool {
-		return protoList.Entry[i].CountryCode < protoList.Entry[j].CountryCode
-	})
+    // Create output directory if not exist
+    if _, err := os.Stat(*outputDir); os.IsNotExist(err) {
+        if mkErr := os.MkdirAll(*outputDir, 0755); mkErr != nil {
+            fmt.Println("Failed: ", mkErr)
+            os.Exit(1)
+        }
+    }
 
-	protoBytes, err := proto.Marshal(protoList)
-	if err != nil {
-		fmt.Println("Failed:", err)
-		os.Exit(1)
-	}
-	if err := os.WriteFile(filepath.Join(*outputDir, *outputName), protoBytes, 0644); err != nil {
-		fmt.Println("Failed: ", err)
-		os.Exit(1)
-	} else {
-		fmt.Println(*outputName, "has been generated successfully.")
-	}
+    protoList := new(router.GeoSiteList)
+
+    // 将合并后的 adblockList 解析并转换为 ProtoBuf
+    pl, err := ParseList(adblockList, nil)
+    if err != nil {
+        fmt.Println("Failed: ", err)
+        os.Exit(1)
+    }
+    site, err := pl.toProto()
+    if err != nil {
+        fmt.Println("Failed: ", err)
+        os.Exit(1)
+    }
+    protoList.Entry = append(protoList.Entry, site)
+
+    // Sort protoList so the marshaled list is reproducible
+    sort.SliceStable(protoList.Entry, func(i, j int) bool {
+        return protoList.Entry[i].CountryCode < protoList.Entry[j].CountryCode
+    })
+
+    protoBytes, err := proto.Marshal(protoList)
+    if err != nil {
+        fmt.Println("Failed:", err)
+        os.Exit(1)
+    }
+    if err := os.WriteFile(filepath.Join(*outputDir, *outputName), protoBytes, 0644); err != nil {
+        fmt.Println("Failed: ", err)
+        os.Exit(1)
+    } else {
+        fmt.Println(*outputName, "has been generated successfully.")
+    }
 }
