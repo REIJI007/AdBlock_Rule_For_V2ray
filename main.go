@@ -37,7 +37,7 @@ type ParsedList struct {
 	Entry     []Entry
 }
 
-// 用于导出纯文本列表
+// 导出纯文本列表
 func (l *ParsedList) toPlainText(listName string) error {
 	var entryBytes []byte
 	for _, entry := range l.Entry {
