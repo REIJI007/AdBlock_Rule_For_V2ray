@@ -199,7 +199,7 @@ func Load(path string) (*List, error) {
 	defer file.Close()
 
 	list := &List{
-		Name: "adblock", // 修改列表标签为adblock
+		Name: "ADBLOCK", // 修改列表标签为ADBLOCK
 	}
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
