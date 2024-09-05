@@ -271,24 +271,23 @@ func ParseList(list *List, ref map[string]*List) (*ParsedList, error) {
 		hasInclude := false
 		for _, entry := range entryList {
 			if entry.Type == "include" {
-				refName := strings.ToUpper(entry.Value)
-				if strings.HasPrefix(refName, "ATTR@") {
+				InclusionName := strings.ToUpper(entry.Value) // 使用InclusionName代替refName
+				if strings.HasPrefix(InclusionName, "ATTR@") {
 					attr := &router.Domain_Attribute{
-						Key: strings.ToLower(refName[5:]),
+						Key: strings.ToLower(InclusionName[5:]),
 					}
-					for refName, refList := range ref {
+					for _, refList := range ref {
 						attrEntrys := createIncludeAttrEntrys(refList, attr)
 						if len(attrEntrys) != 0 {
 							newEntryList = append(newEntryList, attrEntrys...)
 						}
 					}
 				} else {
-					InclusionName := refName
 					if pl.Inclusion[InclusionName] {
 						continue
 					}
 					pl.Inclusion[InclusionName] = true
-					refList := ref[refName]
+					refList := ref[InclusionName]
 					if refList == nil {
 						return nil, errors.New(entry.Value + " 找不到。")
 					}
