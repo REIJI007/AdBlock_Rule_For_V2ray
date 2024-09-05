@@ -368,3 +368,4 @@ func main() {
 	} else {
 		fmt.Println(*outputName, "has been generated successfully.")
 	}
+}
