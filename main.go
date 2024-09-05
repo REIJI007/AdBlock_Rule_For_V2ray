@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"errors"
+	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -12,6 +13,11 @@ import (
 
 	router "github.com/v2fly/v2ray-core/v5/app/router/routercommon"
 	"google.golang.org/protobuf/proto"
+)
+
+var (
+	outputName = flag.String("outputname", "adblock.dat", "Name of the generated dat file")
+	outputDir  = flag.String("outputdir", "./", "Directory to place the generated file")
 )
 
 type Entry struct {
@@ -29,6 +35,25 @@ type ParsedList struct {
 	Name      string
 	Inclusion map[string]bool
 	Entry     []Entry
+}
+
+// 新增的函数，用于将 ParsedList 转换为纯文本（可选，如果需要）
+func (l *ParsedList) toPlainText(listName string) error {
+	var entryBytes []byte
+	for _, entry := range l.Entry {
+		var attrString string
+		if entry.Attrs != nil {
+			for _, attr := range entry.Attrs {
+				attrString += "@" + attr.GetKey() + ","
+			}
+			attrString = strings.TrimRight(":"+attrString, ",")
+		}
+		entryBytes = append(entryBytes, []byte(entry.Type+":"+entry.Value+attrString+"\n")...)
+	}
+	if err := os.WriteFile(filepath.Join(*outputDir, listName+".txt"), entryBytes, 0644); err != nil {
+		return fmt.Errorf(err.Error())
+	}
+	return nil
 }
 
 func (l *ParsedList) toProto() (*router.GeoSite, error) {
@@ -148,7 +173,7 @@ func Load(path string) (*List, error) {
 	defer file.Close()
 
 	list := &List{
-		Name: strings.ToUpper(filepath.Base(path)),
+		Name: "adblock",
 	}
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
@@ -167,7 +192,7 @@ func Load(path string) (*List, error) {
 	return list, nil
 }
 
-func isMatchAttr(Attrs []*router.Domain_Attribute, includeKey string) bool {
+func isMatchAttr(attrs []*router.Domain_Attribute, includeKey string) bool {
 	isMatch := false
 	mustMatch := true
 	matchName := includeKey
@@ -177,8 +202,8 @@ func isMatchAttr(Attrs []*router.Domain_Attribute, includeKey string) bool {
 		matchName = strings.TrimLeft(includeKey, "!")
 	}
 
-	for _, Attr := range Attrs {
-		attrName := Attr.Key
+	for _, attr := range attrs {
+		attrName := attr.Key
 		if mustMatch {
 			if matchName == attrName {
 				isMatch = true
@@ -263,19 +288,27 @@ func ParseList(list *List, ref map[string]*List) (*ParsedList, error) {
 }
 
 func main() {
-	// 读取当前目录下的 adblock.txt 文件
-	filePath := "./adblock.txt"
-	fmt.Println("Reading domain list from", filePath)
+	flag.Parse()
 
-	// 加载 adblock.txt 文件内容
+	// 文件路径设置
+	filePath := "./adblock.txt"
+	outputFile := filepath.Join(*outputDir, *outputName)
+
+	// 加载所有引用的列表，用于处理 include
+	ref := make(map[string]*List)
+	ref["ADBLOCK"] = nil // 预先定义，以防止自引用导致的问题
+
+	// 读取 adblock.txt 文件内容
+	fmt.Println("Reading domain list from", filePath)
 	list, err := Load(filePath)
 	if err != nil {
 		fmt.Println("Failed to load file:", err)
 		os.Exit(1)
 	}
+	ref["ADBLOCK"] = list
 
-	// 解析列表
-	pl, err := ParseList(list, make(map[string]*List))
+	// 解析列表，处理 include
+	pl, err := ParseList(list, ref)
 	if err != nil {
 		fmt.Println("Failed to parse list:", err)
 		os.Exit(1)
@@ -306,8 +339,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	// 将序列化数据写入 adblock.dat 文件
-	outputFile := "./adblock.dat"
+	// 写入 adblock.dat 文件
 	if err := os.WriteFile(outputFile, protoBytes, 0644); err != nil {
 		fmt.Println("Failed to write output file:", err)
 		os.Exit(1)
