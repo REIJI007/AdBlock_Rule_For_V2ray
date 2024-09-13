@@ -393,4 +393,7 @@ https://raw.githubusercontent.com/damengzhu/banad/main/dnslist.txt
 131.hectorm's adblock List
 https://hblock.molinero.dev/hosts_adblock.txt
 
+132.1Hosts's adblock list
+https://raw.githubusercontent.com/badmojr/1Hosts/master/Pro/adblock.txt
+
 
