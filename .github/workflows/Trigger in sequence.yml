@@ -11,11 +11,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Trigger and verify Run_Adblock_Reject_generator
+      - name: Trigger and verify Run_Adblock_Reject_Generator
         env:
           TOKEN: ${{ secrets.TOKEN }}
         run: |
-          workflow_id="Run_Adblock_Reject_generator.yml"
+          workflow_id="Run_Adblock_Reject_Generator.yml"
           ref="main"
           # 触发工作流
           response=$(curl -X POST -H "Authorization: token $TOKEN" \
