@@ -19,7 +19,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v3
       with:
-        go-version: 'latest'  # 使用最新的Go版本
+        go-version: '1.22' # 使用最新的Go 1.22版本
 
     - name: Create go.mod
       run: |
