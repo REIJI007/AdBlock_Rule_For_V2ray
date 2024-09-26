@@ -37,7 +37,7 @@
       <strong><a href="https://adblockproxy.miyajimareji007.workers.dev/v2ray_adblock_reject_domain.txt">Cloudflare加速链接</a></strong>
     </td>
   </tr>
-
+</table>
 <hr>
 
 ## 警告:本过滤器订阅有可能破坏某些网站的功能，也有可能封禁某些色情、赌博网站，使用前请斟酌考虑，如有误杀请积极向上游issue反馈，本仓库仅提供去重、筛选、合并功能
