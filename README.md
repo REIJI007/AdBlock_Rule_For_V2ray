@@ -26,14 +26,14 @@
   <tr>
     <td>DAT</td>
     <td>
-      <strong><a href="https://raw.githubusercontent.com/REIJI007/AdBlock_Rule_For_V2ray/main/adblock.dat">DAT</a></strong> | 
+      <strong><a href="https://raw.githubusercontent.com/REIJI007/AdBlock_Rule_For_V2ray/main/adblock.dat">原始链接</a></strong> | 
       <strong><a href="https://adblockproxy.miyajimareji007.workers.dev/v2ray_adblock.dat">Cloudflare加速链接</a></strong>
     </td>
   </tr>
   <tr>
     <td>拦截域名</td>
     <td>
-      <strong><a href="https://raw.githubusercontent.com/REIJI007/AdBlock_Rule_For_V2ray/main/adblock_reject_domain.txt">拦截域名</a></strong> | 
+      <strong><a href="https://raw.githubusercontent.com/REIJI007/AdBlock_Rule_For_V2ray/main/adblock_reject_domain.txt">原始链接</a></strong> | 
       <strong><a href="https://adblockproxy.miyajimareji007.workers.dev/v2ray_adblock_reject_domain.txt">Cloudflare加速链接</a></strong>
     </td>
   </tr>
