@@ -19,25 +19,27 @@
 <br>
 <br>
 
-<table border="1" style="border-collapse: collapse; width: 100%;">
+<table border="1" style="border-collapse: collapse; width: 100%; font-family: Arial, sans-serif;">
   <tr>
-    <td>订阅地址:</td>
+    <td colspan="2" style="background-color: #f2f2f2; font-weight: bold; text-align: center; padding: 10px;">订阅地址</td>
   </tr>
   <tr>
-    <td>DAT</td>
-    <td>
-      <strong><a href="https://raw.githubusercontent.com/REIJI007/AdBlock_Rule_For_V2ray/main/adblock.dat">Github原始链接</a></strong> | 
-      <strong><a href="https://adblock-v2ray-dat.reiji007.org">Cloudflare加速链接</a></strong>
+    <td style="padding: 8px;">DAT</td>
+    <td style="padding: 8px;">
+      <strong><a href="https://raw.githubusercontent.com/REIJI007/AdBlock_Rule_For_V2ray/main/adblock.dat" style="color: #0066cc;">Github原始链接</a></strong> | 
+      <strong><a href="https://adblock-v2ray-dat.reiji007.org" style="color: #0066cc;">Cloudflare加速链接</a></strong>
     </td>
   </tr>
   <tr>
-    <td>拦截域名</td>
-    <td>
-      <strong><a href="https://raw.githubusercontent.com/REIJI007/AdBlock_Rule_For_V2ray/main/adblock_reject_domain.txt">Github原始链接</a></strong> | 
-      <strong><a href="https://adblock-v2ray-reject-domain.reiji007.org">Cloudflare加速链接</a></strong>
+    <td style="padding: 8px;">拦截域名</td>
+    <td style="padding: 8px;">
+      <strong><a href="https://raw.githubusercontent.com/REIJI007/AdBlock_Rule_For_V2ray/main/adblock_reject_domain.txt" style="color: #0066cc;">Github原始链接</a></strong> | 
+      <strong><a href="https://adblock-v2ray-reject-domain.reiji007.org" style="color: #0066cc;">Cloudflare加速链接</a></strong>
     </td>
   </tr>
 </table>
+
+
 <hr>
 
 ## 警告:本过滤器订阅有可能破坏某些网站的功能，也有可能封禁某些色情、赌博网站，使用前请斟酌考虑，如有误杀请积极向上游issue反馈，本仓库仅提供去重、筛选、合并功能
