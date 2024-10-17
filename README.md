@@ -140,7 +140,9 @@
 
 **七、特别鸣谢**
 
-1.[v2ray](https://github.com/v2fly/v2ray-core)
+
+
+1. [v2ray](https://github.com/v2fly/v2ray-core)
 2. [Adguard](https://github.com/AdguardTeam/AdGuardFilters)
 3. [easylist](https://github.com/easylist/easylist)
 4. [uBlockOrigin](https://github.com/uBlockOrigin/uAssets)
@@ -172,6 +174,8 @@
 30. [Smart-TV](https://github.com/Perflyst/PiHoleBlocklist)
 31. [Mvps](https://winhelp2002.mvps.org)
 32. [anti-adblock-killer](https://github.com/reek/anti-adblock-killer)
+
+
 
 
 
