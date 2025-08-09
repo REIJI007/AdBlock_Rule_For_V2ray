@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-10 03:07:55
+# Generated on: 2025-08-10 03:27:02
 # Generated AdBlock rules
-# Total entries: 161024
+# Total entries: 161023
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -46762,7 +46762,6 @@ dnn4px252i5wx.cloudfront.net
 dnn506yrbagrg.cloudfront.net
 dnp.tt.omtrdc.net
 dns-clientinfo.cbsivideo.com
-dns-clientinfo.vtg.paramount.tech
 dns.strip-chat.club
 dns1.uk2.net.jumia.ug
 dnsbl.test.abcnews.tt.omtrdc.net
