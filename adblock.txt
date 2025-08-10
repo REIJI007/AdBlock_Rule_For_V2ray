@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-10 20:19:21
+# Generated on: 2025-08-10 20:59:46
 # Generated AdBlock rules
-# Total entries: 161023
+# Total entries: 161024
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -148838,6 +148838,7 @@ trygghansa.tt.omtrdc.net
 trygvesta.tt.omtrdc.net
 tryonline.bid
 tryrewave-ss.zavydeals.com
+ts-analysis.shoalter.com
 ts.archbee.com
 ts.beechhalljoinery.co.uk
 ts.buyinsulationonline.co.uk
