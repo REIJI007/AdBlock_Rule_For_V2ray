@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-13 04:11:39
+# Generated on: 2025-08-13 04:35:23
 # Generated AdBlock rules
-# Total entries: 160054
+# Total entries: 160055
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -30340,6 +30340,7 @@ cmnoe.saadaa.in
 cmnzucwxl1tzlxs4.rabbclk.com
 cmp-cdn.ghostery.com
 cmp.audi.be
+cmp.bonniernews.se
 cmp.cupra.be
 cmp.dieteren.be
 cmp.dieterencenters.be
