@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-12 14:47:46
+# Generated on: 2025-08-12 15:12:32
 # Generated AdBlock rules
-# Total entries: 160044
+# Total entries: 160045
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -31267,6 +31267,7 @@ console.revive-adserver.net
 console.sacommunications.com
 console.trackandfieldnews.com
 console.walaplusadserver.com
+consolidata.ai
 consorsfinanzgermany.tt.omtrdc.net
 consortium.adib.ae
 constellation.tt.omtrdc.net
