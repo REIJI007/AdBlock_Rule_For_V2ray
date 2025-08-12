@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-12 21:47:02
+# Generated on: 2025-08-12 22:10:16
 # Generated AdBlock rules
-# Total entries: 160047
+# Total entries: 160052
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -14707,6 +14707,7 @@ ada8.ampleur.jp
 adadvisor.net
 adaied.vegas.com
 adamsads.midtc.com
+adash-emas.cn-hangzhou.aliyuncs.com
 adash.m.taobao.com
 adash.man.aliyuncs.com
 adashx-twtelecom.azure.net.daraz.com
@@ -37627,6 +37628,7 @@ df7e1cf1aa.51e3337e65.com
 df90ddc549.118bf804e5.com
 dfb523f308.25e664eaff.com
 dfb55a5491.d3edbb478c.com
+dfe.mic.mob.com
 dfe2gamtua4ypyn-p.linkomo.fr
 dfehddia.moller-mammen.dk
 dff4adcb3a.65a16dd098.com
@@ -38830,6 +38832,7 @@ dust.xxx-video-indian.com
 dustaclean-ss.checkoutera.com
 dustaclean-ss.olladeals.com
 dutchrosetest.dutchrosemedia.com
+dutils.com
 duyxvw.finntrail.ru
 duzvl.com
 dv.hyundaicard.com
@@ -94006,6 +94009,7 @@ log.adtimaserver.vn
 log.affiliate.rakuten.co.jp
 log.ahamo.com
 log.ajunews.com
+log.aliyuncs.com
 log.api.useinsider.com
 log.api.zaloapp.com
 log.apk.v-mate.mobi
@@ -111886,6 +111890,7 @@ openbsdk.net.daraz.com
 openbsdlications.car40.net.daraz.com
 opendocsn-switch.121pago.net.daraz.com
 openerpstagehasani.net.daraz.com
+openlog.tapapis.cn
 openmonitor.alipay-eco.com
 openmonitor.alipay.com
 openrate.aweber.com
