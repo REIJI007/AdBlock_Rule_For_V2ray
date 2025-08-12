@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-12 23:48:41
+# Generated on: 2025-08-13 00:12:02
 # Generated AdBlock rules
-# Total entries: 160052
+# Total entries: 160054
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -38693,6 +38693,7 @@ dsp.brandlabs.ai
 dsp.e-volution.ai
 dsp.foremedia.net
 dsp.nativeads.com
+dsp.newsbreak.com
 dsp.pushub.net
 dsp.reacheffect.com
 dsp.rtbplatform.net
@@ -103922,6 +103923,7 @@ msoid.net.daraz.com
 msoidesetdata.fmsoideya.net.daraz.com
 msoidlatin.net.daraz.com
 msoidr41.us.net.daraz.com
+msp.newsbreak.com
 mspac.miragescreensystems.com
 msr.globaljet.aero
 msr.selection-schwander.ch
