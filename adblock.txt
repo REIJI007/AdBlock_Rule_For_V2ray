@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-13 16:14:59
+# Generated on: 2025-08-13 16:44:17
 # Generated AdBlock rules
-# Total entries: 160057
+# Total entries: 160058
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -67295,6 +67295,7 @@ gjrcabyse8okvt3k.tt.omtrdc.net
 gjrcabyse8okvt3k.tt.tt.omtrdc.net
 gjrrr.hotelcollection.com
 gjtrack.uc.cn
+gjxmcla.pro
 gjxxld.makumatka.fi
 gk.gkservices.com
 gkbdess.geekbuying.com
