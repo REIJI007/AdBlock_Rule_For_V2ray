@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-13 12:54:41
+# Generated on: 2025-08-13 13:12:17
 # Generated AdBlock rules
-# Total entries: 160055
+# Total entries: 160056
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -152803,6 +152803,7 @@ wao.atu.de
 wao.shashokudeli.com
 wao.wao-cart.com
 wap-subscriptions.dev.iat.it.tt.omtrdc.net
+wap.qqbiquge.net
 wapamarketing.net.daraz.com
 wapstart.ru
 war-376.ns.tt.omtrdc.net
