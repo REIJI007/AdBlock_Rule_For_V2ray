@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-14 18:12:11
+# Generated on: 2025-08-14 18:41:33
 # Generated AdBlock rules
-# Total entries: 160061
+# Total entries: 160060
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -112266,7 +112266,6 @@ ozoj.com
 ozsbe.goggles4u.com
 ozvdo.execupgrades.com
 ozyawy1heaczi2n-p.adkplan.fr
-p-aw2-adapt-beacon.awsprodops.movetv.com
 p-behacdn.ksmobile.net
 p-cg64-slinganalytics.movetv.com
 p-events.ivideosmart.com
