@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-14 20:20:52
+# Generated on: 2025-08-14 21:05:34
 # Generated AdBlock rules
-# Total entries: 160064
+# Total entries: 160067
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -31238,6 +31238,7 @@ consejeroveterinariostage-gateway.net.daraz.com
 consejeroveterinariostage.administrators.net.daraz.com
 consent-manager-events.ogury.io
 consent.dadoslegais.com.br
+consent.easybrain.com
 consent.nitrocnct.com
 consenttool.haendlerbund.de
 conservation277.fun
@@ -32282,6 +32283,7 @@ crmsf.commonwealth.com
 crocodile.rapid-sale.co.uk
 crom.spiegelshop.nl
 cromaretail.tt.omtrdc.net
+cross-promo-provider.easybrain.com
 crossadsapi.ecomobileapp.com
 crossboardmobile.com
 crossees.com
@@ -121456,6 +121458,7 @@ s2s.weclean4u.com.cy
 s2stape.certero.bet
 s2whyufxmzam.chatpay.com.br
 s3-analytics-events.easybrain.com
+s3-ca-liveops.easybrain.com
 s3-iad-ww.cf.videorolls.row.aiv-cdn.net
 s3.net.daraz.com
 s3.rtnews.pro
