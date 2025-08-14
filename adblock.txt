@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-14 11:46:01
+# Generated on: 2025-08-14 12:20:34
 # Generated AdBlock rules
-# Total entries: 160059
+# Total entries: 160061
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -17315,6 +17315,8 @@ analytics-car-nfl.yinzcam.com
 analytics-cbj-nhl.yinzcam.com
 analytics-cca-venues.yinzcam.com
 analytics-cdiscount.com
+analytics-cdn.levante-emv.com
+analytics-cdn.prensaiberica.es
 analytics-cf.bigcrunch.com
 analytics-cfg-venues.yinzcam.com
 analytics-cgy-cfl.yinzcam.com
