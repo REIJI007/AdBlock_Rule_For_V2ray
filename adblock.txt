@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-18 22:53:09
+# Generated on: 2025-08-18 23:10:57
 # Generated AdBlock rules
-# Total entries: 163793
+# Total entries: 163794
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -23892,6 +23892,7 @@ cdnx.villaggiolabarca.it
 cdnx.villaggiorelaislemagnolie.it
 cdp.americanexpress.ch
 cdp.cashback-cards.ch
+cdp.cloud.unity.cn
 cdp.miles-and-more-cards.ch
 cdp.yna.co.kr
 cdrive.compellent.com
