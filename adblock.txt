@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-18 23:49:13
+# Generated on: 2025-08-19 00:13:22
 # Generated AdBlock rules
-# Total entries: 163794
+# Total entries: 163795
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -138027,6 +138027,7 @@ tag.datariver.ru
 tag.dec-connect.decsuite.com
 tag.discoverkidult.com
 tag.drvitornunes.com
+tag.eisa.mercari.com
 tag.elevatedigital.it
 tag.escalated.io
 tag.eu.flashforge.com
