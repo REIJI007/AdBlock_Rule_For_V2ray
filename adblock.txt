@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-18 22:40:31
+# Generated on: 2025-08-18 22:53:09
 # Generated AdBlock rules
-# Total entries: 163792
+# Total entries: 163793
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -89556,6 +89556,7 @@ loglady.publicbroadcasting.net
 logon.andbeyond.media
 logperf.vnexpress.net
 logql.yahoo.co.jp
+logr-ingest.com
 logrocket.com
 logs-ingress.svc.vinted.com
 logs-partners.coupang.com
