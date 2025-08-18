@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-18 20:21:28
+# Generated on: 2025-08-18 21:06:38
 # Generated AdBlock rules
-# Total entries: 163791
+# Total entries: 163792
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -15503,6 +15503,7 @@ alicert.emailvision.panel.net.daraz.com
 alicia.tantawy.app
 aliconnect.hexagon.com
 aliexam-cloudfrontcar31.net.daraz.com
+aliexpress-media.com
 alimebot-kubemarketing.net.daraz.com
 alimebot-www-pantheon.applications.net.daraz.com
 alimebot-www.apimapications.net.daraz.com
