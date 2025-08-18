@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-19 00:13:22
+# Generated on: 2025-08-19 00:44:19
 # Generated AdBlock rules
-# Total entries: 163795
+# Total entries: 163796
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -72683,6 +72683,7 @@ hltckl.vendulalondon.com
 hlwxkuvq2sodpnf-p.adkplan.fr
 hlygsp.modivo.ro
 hm.houseofmirror.xyz
+hm2wjuuus3.execute-api.ap-northeast-1.amazonaws.com
 hm57xxzwke1zhx3q.kh.tt.omtrdc.net
 hm61x54tvtj38yc8.partner.net.daraz.com
 hmakpa.saksoff5th.com
