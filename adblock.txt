@@ -3,7 +3,7 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-19 17:33:59
+# Generated on: 2025-08-19 17:47:00
 # Generated AdBlock rules
 # Total entries: 163796
 
@@ -14002,7 +14002,6 @@ ads.eumaisviagens.com.br
 ads.feelingtouch.com
 ads.free-to.download
 ads.frontmail.io
-ads.fubo.tv
 ads.goodvibres.com
 ads.greengeeks.com
 ads.hentaiheart.com
@@ -21137,6 +21136,7 @@ beacon.wingwin.eu
 beacon.www.theguardian.com
 beaconhealthsystem.hrm.healthgrades.com
 beacons-prod.fubo.tv
+beacons.ads.fubo.tv
 beacons.digital.disneyadvertising.com
 beacons.helium.com
 beafdf.restaupro.com
