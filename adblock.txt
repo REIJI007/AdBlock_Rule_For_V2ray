@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-19 21:30:14
+# Generated on: 2025-08-19 21:50:13
 # Generated AdBlock rules
-# Total entries: 163797
+# Total entries: 163798
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -137859,6 +137859,7 @@ t.usajaguars.com
 t.usatoday-breakingupdates.com
 t.usctrojans.com
 t.usdtoreros.com
+t.usermaven.com
 t.usm.com
 t.usnh.edu
 t.utahstateaggies.com
