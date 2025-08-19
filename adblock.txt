@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-20 02:42:51
+# Generated on: 2025-08-20 03:07:53
 # Generated AdBlock rules
-# Total entries: 163799
+# Total entries: 163801
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -104850,6 +104850,7 @@ prm.necplatforms.co.jp
 prm.vitanova.dk
 prm.xserver.ne.jp
 prn.gaysme.com
+pro-1w-dataaggregator.onelouder.com
 pro-news.net
 pro-web.net
 pro.adrofx.com
@@ -125360,6 +125361,7 @@ st.zoo24.de
 st1.bhol.co.il
 st1.lg.avendrealouer.fr
 st10.sofi.com
+sta-events.swishapps.ai
 sta.coroadeflor.com
 sta.tirexo.ink
 sta.tracedock.com
