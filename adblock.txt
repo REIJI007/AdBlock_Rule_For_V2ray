@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-21 00:12:39
+# Generated on: 2025-08-21 00:39:25
 # Generated AdBlock rules
-# Total entries: 163809
+# Total entries: 163812
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -27929,6 +27929,7 @@ collab9.actonservice.com
 collaborate.blackboard.com
 collateral.xham.live
 collect.4gtv.tv
+collect.adplogger.no
 collect.aeonbank.co.jp
 collect.alipay.com
 collect.allianz-technology.ch
@@ -73843,6 +73844,7 @@ ihfwer.aboutyou.com
 ihgfdc.miu-star.com.tw
 ihgsixcontinentshote.tt.omtrdc.net
 ihhwrq.peyrouse-hair-shop.com
+ihi.flowplayer.com
 ihnbqe.shane.co.jp
 ihomedating.ez123dating.xyz
 ihpyig.hometogo.ch
@@ -120683,6 +120685,7 @@ soxnwz.lg.com
 soxofo.concursosnobrasil.com.br
 sp-app.fixly.pl
 sp-prod.net
+sp.api.no
 sp.app.com
 sp.argusleader.com
 sp.azcentral.com
