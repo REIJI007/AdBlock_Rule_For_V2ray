@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-21 06:08:16
+# Generated on: 2025-08-21 06:32:59
 # Generated AdBlock rules
-# Total entries: 163815
+# Total entries: 163817
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -28014,6 +28014,7 @@ collect.peek-cloppenburg.de
 collect.q10-koenzym.no
 collect.rbcroyalbank.com
 collect.realignedtechnologies.com
+collect.rebelmouse.io
 collect.rtl.lu
 collect.sas.com
 collect.scleasing.dk
@@ -134829,6 +134830,7 @@ stats.totalav.com
 stats.tou.tv
 stats.townnews.com
 stats.tradingacademy.com
+stats.traffective.cloud
 stats.training.fit
 stats.trainsley69.me
 stats.transactional.blog
