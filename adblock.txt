@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-21 05:08:33
+# Generated on: 2025-08-21 05:30:42
 # Generated AdBlock rules
-# Total entries: 163812
+# Total entries: 163814
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -142547,6 +142547,7 @@ tqviuvp31w2ho40-p.adkclicker.fr
 tqxpnv.bauhaus.info
 tr-business.vodafone.com
 tr-ebs.10-marketing.net.daraz.com
+tr-experiments.parsely.com
 tr-go.experian.com
 tr-ln-2aining-ns3.cl.bellsouth.net.daraz.com
 tr-ln-2ining.r-ln-1.net.daraz.com
@@ -152820,6 +152821,7 @@ valleystageidm.net.daraz.com
 valleystaging-javhihi.net.daraz.com
 valleystaging.freshmaza.net.daraz.com
 valleystagingwww.ysr.net.daraz.com
+valnet.sentinelpro.com
 valpolicella-stage-damxx.net.daraz.com
 valpolicella-stage-legacy.net.daraz.com
 valpolicella-stagekatmoviehd.net.daraz.com
