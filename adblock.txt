@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-20 23:45:48
+# Generated on: 2025-08-21 00:12:39
 # Generated AdBlock rules
-# Total entries: 163806
+# Total entries: 163809
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -24070,6 +24070,7 @@ charteredaccountants.tt.omtrdc.net
 chasena.tt.omtrdc.net
 chat.compassshield.com
 chat.forddirectdealers.com
+chat.quickcep.com
 chatbot-cdn.czso.cz
 chatbot.akbank.com
 chatbot.lifecell.ua
@@ -36544,6 +36545,7 @@ dwga.unclearnies.com
 dwga.verdescannabis.com
 dwga.weightlossinjections.ie
 dwglgp.dunelm.com
+dwin1.com
 dwizdq.ekosport.nl
 dwmrcepv5hu4zbs-p.bonnelectureatous.fr
 dwrgczviarpanmf-p.adktrack34.xyz
@@ -116437,6 +116439,7 @@ smbzbm.skymilescruises.com
 smc.mcgames.bet.br
 smc.swiftnav.com
 smc1-go.relyens.eu
+smct.co
 smdgll.polar.com
 smdws.cwbank.com
 sme.avis.co.nz
