@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-21 05:30:42
+# Generated on: 2025-08-21 05:45:48
 # Generated AdBlock rules
-# Total entries: 163814
+# Total entries: 163815
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -58919,6 +58919,7 @@ euvdp.maxbp.com
 eux-stape.weclapp.com
 ev.api.bdg.com
 ev.kck.st
+ev.mmin.io
 ev.nasdaq.com
 ev0yckp4oct2w8x-p.clead.xyz
 ev2.api.bdg.com
