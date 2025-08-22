@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-22 22:10:56
+# Generated on: 2025-08-22 22:34:32
 # Generated AdBlock rules
-# Total entries: 163839
+# Total entries: 163844
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -4789,6 +4789,7 @@
 2d1a16af63.55f4605f6d.com
 2d5ae0d013.d8c04a25e8.com
 2d91ee1fa3.7a53b9303c.com
+2ddq.com
 2domaincontrolomsivaslups.net.daraz.com
 2e1aaa5ac9.3e1b245c19.com
 2e4ad8cce9.d39274b315.com
@@ -15645,6 +15646,7 @@ am3s622gcd6m.tt.live
 ama.lloydsadd.com
 ama.tsysmerchantsolutions.com
 amadeus.tt.omtrdc.net
+amaerodactylon.com
 amahami.net.anwalt.de
 amalto.actonservice.com
 amanad.adtdp.com
@@ -23581,6 +23583,7 @@ cdn.asdnow.xyz
 cdn.asecv.xyz
 cdn.asopn.com
 cdn.asrop.xyz
+cdn.aucey.com
 cdn.auditude.com
 cdn.bahswl.com
 cdn.bambusystems.com
@@ -61556,6 +61559,7 @@ g2wtzjf1kdneqiy-p.clickomo.fr
 g32kxmarsdxj9s0t.frontpage-partner.net.daraz.com
 g32kxmarsdxj9s0t.partner.net.daraz.com
 g34.myavlive.com
+g4nd.com
 g4oi1cb0gspwr7j-p.adkclicker.fr
 g5hvff5.chatwerk.de
 g6.tt.omtrdc.net
@@ -163486,6 +163490,7 @@ zk.atarsuccess.com.au
 zk.freraofsweden.se
 zk.lydinge.com
 zk.vrgaming.se
+zk1w.com
 zkc5.fleurancenature.fr
 zkgbp.fidodyrebutikk.com
 zkgp4cak3fd61b94.net.daraz.com
