@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-22 20:19:40
+# Generated on: 2025-08-22 21:00:05
 # Generated AdBlock rules
-# Total entries: 163832
+# Total entries: 163839
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -21475,6 +21475,7 @@ bi.yeshen.com
 bia.brightinfo.com
 bibglj.timberland.fr
 bicp-analytics.postscript.io
+bid-algorix.com
 bid.mbidtg.com
 bid.onclcktg.com
 bidder.dsp.outfit7.com
@@ -60794,6 +60795,7 @@ focusoptrics-ss.olladeals.com
 fodhv.thh-org.nl
 fogrm.macduggal.com
 fohne.joinpeep.io
+foisonad.com
 fokbrd.impo.ch
 folksam.tt.omtrdc.net
 follow.koandigital.com
@@ -78822,6 +78824,7 @@ kauai.shakaguide.com
 kaufland.tt.omtrdc.net
 kaxlfq.testingwithtestcafe.com
 kaya.fratellirestaurant.au
+kayzen.io
 kbc.tt.omtrdc.net
 kbfqxb.clicknfunny.com
 kborst.modivo.sk
@@ -80552,6 +80555,7 @@ lifewaychristianreso.tt.omtrdc.net
 liftingknowhow.certex.se
 liftoff-creatives.io
 liftoff.io
+liftyad.xyz
 lighterthinnerstronger.fiber-line.com
 lighthouse.edoinc.com
 lighthouse.loanzify.app
@@ -89640,6 +89644,7 @@ loon.davidalindahl.com
 loon.energizer.asia
 loon.jrmyfranck.com
 loop.bengali-sex-video.com
+loopmeedge.net
 lord.actonservice.com
 lords.xhlive.org
 lore.joalheria360.com.br
@@ -100117,6 +100122,7 @@ openshop.m-shop.me
 openshop.oshp.io
 openssl.ns.emailvision.authenticate.net.daraz.com
 openstat.net
+openstats.co
 opentelemetry-collector.shared-services.us-east-1.general.prod.wildlife.io
 openx.mondiale.co.uk
 openx.tiesraides.lv
@@ -119979,6 +119985,7 @@ smqzbr.proozy.com
 smr.nuro.jp
 smr.so-net.ne.jp
 smr2.so-net.ne.jp
+smrtads.com
 sms-cuc.e2eprod.repackageaus5.test.ajo.adobe.com
 sms-cuc.e2eprod.repackagecan2.test.ajo.adobe.com
 sms-cuc.e2eprod.repackagenld2.test.ajo.adobe.com
