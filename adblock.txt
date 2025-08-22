@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-22 17:46:14
+# Generated on: 2025-08-22 18:11:23
 # Generated AdBlock rules
-# Total entries: 163826
+# Total entries: 163827
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -14023,6 +14023,7 @@ ads.luffy.my.id
 ads.mobilityware.com
 ads.mobvertising.net
 ads.mopub.com
+ads.mozilla.org
 ads.onetouchtv.me
 ads.oppomobile.com
 ads.optimizesrv.com
