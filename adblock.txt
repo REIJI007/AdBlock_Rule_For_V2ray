@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-22 19:28:24
+# Generated on: 2025-08-22 19:42:28
 # Generated AdBlock rules
-# Total entries: 163829
+# Total entries: 163832
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -17565,6 +17565,7 @@ api.datingclix.com
 api.datinghelp.dk
 api.datingxperten.de
 api.deafios.com.br
+api.deeplink.dev
 api.designerexpert.com.br
 api.diegorial.com
 api.digitalpiloten.org
@@ -22466,6 +22467,7 @@ c.aquaservice.com
 c.archden.org
 c.axioshq.com
 c.bazo.io
+c.bazu.cc
 c.bigmir.net
 c.bloblohub.com
 c.civo.com
@@ -58964,6 +58966,7 @@ event.dengage.com
 event.dfinery.io
 event.entreprises-collectivites.engie.fr
 event.evtm.53.com
+event.flareflow.tv
 event.geniee-search.net
 event.gitexfuturehealth.com
 event.gitexnigeria.ng
