@@ -3,9 +3,9 @@
 # Homepage: https://github.com/REIJI007/AdBlock_Rule_For_V2ray
 # LICENSE1: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-GPL 3.0
 # LICENSE2: https://github.com/REIJI007/AdBlock_Rule_For_V2ray/blob/main/LICENSE-CC-BY-NC-SA 4.0
-# Generated on: 2025-08-24 21:36:59
+# Generated on: 2025-08-24 21:45:02
 # Generated AdBlock rules
-# Total entries: 163844
+# Total entries: 163843
 
 0--skitch--0.tt.omtrdc.net
 0-0-0-birkart-clws-ifs-globalmn.activecampaign.tt.omtrdc.net
@@ -139510,7 +139510,6 @@ telemetry.schwinnfitness.com
 telemetry.sentara.com
 telemetry.sentarahealthplans.com
 telemetry.services.yofi.ai
-telemetry.sgp.pvp.net
 telemetry.soundcloud.com
 telemetry.stryker.com
 telemetry.svc.transifex.net
